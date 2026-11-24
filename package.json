@@ -1,0 +1,15 @@
+{
+  "name": "practice",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Apex practice: algorithms, design patterns and Trailhead exercises",
+  "scripts": {
+    "prettier": "prettier --write \"**/*.{cls,trigger,json,md,xml}\"",
+    "prettier:verify": "prettier --list-different \"**/*.{cls,trigger,json,md,xml}\""
+  },
+  "devDependencies": {
+    "@prettier/plugin-xml": "^2.0.1",
+    "prettier": "^2.6.0",
+    "prettier-plugin-apex": "^1.10.0"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "packageDirectories": [
+    {
+      "path": "design-patterns",
+      "default": true
+    },
+    {
+      "path": "algorithms"
+    },
+    {
+      "path": "trailhead"
+    }
+  ],
+  "name": "Practice",
+  "namespace": "",
+  "sfdcLoginUrl": "https://login.salesforce.com",
+  "sourceApiVersion": "60.0"
+}
