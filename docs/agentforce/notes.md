@@ -65,6 +65,7 @@ The bulk test for return requests failed with "Too many SOQL queries: 101" altho
 ## Research
 
 - [How agents are built](research-agent-authoring.md): editors, lifecycle, v68 metadata, Agent Script essentials, testing.
+- [Feature folders and separation of concerns](research-project-structure.md): what SFDX allows, folders versus package directories, Apex layers, agent action guidance.
 
 ## Open questions
 
