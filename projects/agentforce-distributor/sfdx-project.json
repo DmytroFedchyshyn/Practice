@@ -1,0 +1,15 @@
+{
+  "packageDirectories": [
+    {
+      "path": "force-app/distributor",
+      "default": true
+    },
+    {
+      "path": "force-app/main/default"
+    }
+  ],
+  "name": "agentforce-distributor",
+  "namespace": "",
+  "sfdcLoginUrl": "https://login.salesforce.com",
+  "sourceApiVersion": "68.0"
+}

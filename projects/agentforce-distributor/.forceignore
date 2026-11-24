@@ -1,0 +1,30 @@
+# Never pull these back from the org: access is granted through permission sets and groups
+# (docs/engineering/code-review-rules.md SEC-06).
+**/profiles/**
+**/settings/**
+**/*.profile-meta.xml
+# A profile the build itself owns (for example, the one an external-user licence requires) is
+# deployed only when the project records it under SEC-06; un-ignore it here with its exact path:
+# !force-app/distributor/profiles/<Profile Name>.profile-meta.xml
+package.xml
+.sf/
+.sfdx/
+
+# IDE and tooling files
+/.illuminatedCloud/
+**/*.ts
+**/tsconfig*.json
+**/*.tsbuildinfo
+**/eslint.config.*
+**/graphql.config.yml
+# Placeholder files that keep empty folders in git
+**/.gitkeep
+
+# Third-party code in force-app/distributor/vendor (docs/engineering/architecture.md §5): its licences and notes stay in Git and are never deployed
+**/vendor/**/LICENSE*
+**/vendor/**/*.md
+# Jest tests of the Lightning web components (docs/engineering/architecture.md §4.5): run with `npm test`, never deployed
+**/__tests__/**
+# LWC configuration files
+**/jsconfig.json
+**/.eslintrc.json

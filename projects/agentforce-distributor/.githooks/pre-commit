@@ -1,0 +1,26 @@
+#!/bin/sh
+# Pre-commit checks (docs/engineering/development-foundation.md §1.5). Installed by `npm install`,
+# which points git at .githooks.
+#
+#  1. lint-staged runs on the staged files of the build folder: Prettier formats them, ESLint lints
+#     the Aura and LWC JavaScript, and Jest runs the tests related to changed components. If one of
+#     them fails, the commit goes ahead and the pipeline reports it.
+#  2. gitleaks scans the staged changes and stops the commit if it finds a secret, because a secret
+#     that reaches the remote has to be revoked and reissued. A false positive goes into .gitleaks.toml.
+#
+# Skip both for one commit with `git commit --no-verify`.
+
+if [ -x node_modules/.bin/lint-staged ]; then
+    node_modules/.bin/lint-staged --concurrent false || echo "pre-commit: formatting, linting or Jest reported findings on the staged files; committing them as they are." >&2
+else
+    echo "pre-commit: run 'npm install' to have staged code formatted, linted and tested." >&2
+fi
+
+if command -v gitleaks >/dev/null 2>&1; then
+    if ! gitleaks git --pre-commit --staged --redact --no-banner --verbose; then
+        echo "pre-commit: gitleaks found a possible secret in the staged changes; the commit was stopped." >&2
+        exit 1
+    fi
+else
+    echo "pre-commit: gitleaks is not installed; staged changes were not scanned for secrets." >&2
+fi

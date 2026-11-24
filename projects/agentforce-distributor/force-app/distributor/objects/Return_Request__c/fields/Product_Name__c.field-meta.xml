@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Product_Name__c</fullName>
+    <label>Product Name</label>
+    <description>Name of the returned product, so flows and agent actions can show it without a relationship query.</description>
+    <type>Text</type>
+    <formula>Product__r.Name</formula>
+    <formulaTreatBlanksAs>BlankAsBlank</formulaTreatBlanksAs>
+</CustomField>

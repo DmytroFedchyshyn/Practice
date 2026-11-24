@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Code__c</fullName>
+    <label>Code</label>
+    <description>Short warehouse code shared with the ERP. Upsert key for seed data.</description>
+    <type>Text</type>
+    <length>10</length>
+    <required>true</required>
+    <unique>true</unique>
+    <caseSensitive>false</caseSensitive>
+    <externalId>true</externalId>
+</CustomField>

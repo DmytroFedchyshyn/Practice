@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingOwnerRules>
+        <fullName>Partner_Service_Agent_Reads_All</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>The partner service agent reads every return request; its actions scope the results to the partner account in the session.</description>
+        <label>Partner Service Agent Reads All</label>
+        <sharedTo>
+            <role>Partner_Service_Agent</role>
+        </sharedTo>
+        <sharedFrom>
+            <allInternalUsers></allInternalUsers>
+        </sharedFrom>
+    </sharingOwnerRules>
+</SharingRules>

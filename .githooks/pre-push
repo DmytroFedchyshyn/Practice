@@ -1,0 +1,17 @@
+#!/bin/sh
+# Pre-push for a repository that holds several projects of the kit, each in its own folder with its
+# own project.config.json. Git runs the hooks of the repository's root only, so this one hands what
+# git gives it to the pre-push hook of every project, run from that project's folder. Paths in a git
+# command are relative to the folder it runs in, so each project's protected paths (force-app/ by
+# default) are checked inside that project only.
+#
+# `git push --no-verify` skips it; the pipeline on the default branch still reports the push.
+
+refs=$(cat)
+status=0
+for config in $(git ls-files --cached -- '*project.config.json'); do
+    dir=$(dirname "$config")
+    [ -x "$dir/.githooks/pre-push" ] || continue
+    printf '%s\n' "$refs" | (cd "$dir" && ./.githooks/pre-push "$@") || status=1
+done
+exit $status

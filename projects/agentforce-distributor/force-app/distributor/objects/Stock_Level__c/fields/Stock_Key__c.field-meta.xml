@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Stock_Key__c</fullName>
+    <label>Stock Key</label>
+    <description>Warehouse code and product code joined with a colon. Upsert key that keeps one row per warehouse and product.</description>
+    <type>Text</type>
+    <length>80</length>
+    <required>true</required>
+    <unique>true</unique>
+    <caseSensitive>false</caseSensitive>
+    <externalId>true</externalId>
+</CustomField>

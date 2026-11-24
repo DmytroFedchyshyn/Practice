@@ -1,20 +1,17 @@
 {
   "packageDirectories": [
     {
-      "path": "agentforce",
+      "path": "algorithms",
       "default": true
     },
     {
       "path": "design-patterns"
     },
     {
-      "path": "algorithms"
-    },
-    {
       "path": "trailhead"
     }
   ],
-  "name": "Practice",
+  "name": "practice-exercises",
   "namespace": "",
   "sfdcLoginUrl": "https://login.salesforce.com",
   "sourceApiVersion": "68.0"

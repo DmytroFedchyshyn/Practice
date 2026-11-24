@@ -1,0 +1,18 @@
+{
+  "_doc": [
+    "Org registry for the fleet deploy (docs/engineering/ci-cd.md). One entry per org: the alias the",
+    "workflow uses, the CI environment that holds its secrets, and the groups it belongs to.",
+    "A group is deployed together; use waves (wave-1, wave-2) to roll a release out in stages."
+  ],
+  "groups": {
+    "uat": ["acme-uat"],
+    "wave-1": ["acme-prod-eu"],
+    "wave-2": ["acme-prod-us"],
+    "all-prod": ["acme-prod-eu", "acme-prod-us"]
+  },
+  "orgs": {
+    "acme-uat": { "environment": "acme-uat", "production": false },
+    "acme-prod-eu": { "environment": "acme-prod-eu", "production": true },
+    "acme-prod-us": { "environment": "acme-prod-us", "production": true }
+  }
+}

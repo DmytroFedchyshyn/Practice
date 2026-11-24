@@ -1,0 +1,29 @@
+.DS_Store
+
+# Salesforce CLI and local dev state
+.sf/
+.sfdx/
+.localdev/
+.localdevserver/
+
+# IDE state
+.idea/
+.vscode/
+/.illuminatedCloud/
+/IlluminatedCloud/
+/out/
+target/
+**/tsconfig*.json
+**/*.tsbuildinfo
+**/graphql.config.yml
+
+# Node
+node_modules/
+.npm/
+
+# Code check reports (npm run scan, CI artifacts)
+/reports/
+coverage/
+
+# Local worktrees for parallel work
+.worktrees/
