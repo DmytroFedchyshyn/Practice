@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>68.0</apiVersion>
+    <assignments>
+        <description>Adds the current request to the output and counts it.</description>
+        <name>Add_Request</name>
+        <label>Add Request</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>returnRequests</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>currentRequest</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>collectedCount</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>1.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Each_Request</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <description>Keeps the request when the status filter matches and fewer than 10 requests are collected.</description>
+        <name>Should_Include</name>
+        <label>Should Include</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnector>
+            <targetReference>Each_Request</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Skip</defaultConnectorLabel>
+        <rules>
+            <name>Include</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>isWanted</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Add_Request</targetReference>
+            </connector>
+            <label>Include</label>
+        </rules>
+    </decisions>
+    <description>Lists the latest return requests of one partner account, newest first, at most 10, optionally only those with a given status. Runs in the context of the running user, so sharing and field access decide what is returned. Used as an agent action.</description>
+    <environments>Default</environments>
+    <formulas>
+        <description>True when fewer than 10 requests are collected and the request matches the optional status filter (case-insensitive).</description>
+        <name>isWanted</name>
+        <dataType>Boolean</dataType>
+        <expression>{!collectedCount} &lt; 10 &amp;&amp; (ISBLANK(TRIM({!status})) || UPPER(TEXT({!currentRequest.Status__c})) = UPPER(TRIM({!status})))</expression>
+    </formulas>
+    <interviewLabel>List Return Requests {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>List Return Requests</label>
+    <loops>
+        <description>Walks the partner's requests from newest to oldest.</description>
+        <name>Each_Request</name>
+        <label>Each Request</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNextValueToReference>currentRequest</assignNextValueToReference>
+        <collectionReference>allRequests</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Should_Include</targetReference>
+        </nextValueConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>All requests of the account, newest first. The request number is an auto number, so it sorts in creation order.</description>
+        <name>Get_Requests</name>
+        <label>Get Requests</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Each_Request</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Account__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>accountId</elementReference>
+            </value>
+        </filters>
+        <object>Return_Request__c</object>
+        <outputReference>allRequests</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Name</queriedFields>
+        <queriedFields>Order_Number__c</queriedFields>
+        <queriedFields>Product_Name__c</queriedFields>
+        <queriedFields>Quantity__c</queriedFields>
+        <queriedFields>Reason__c</queriedFields>
+        <queriedFields>Status__c</queriedFields>
+        <queriedFields>Resolution_Notes__c</queriedFields>
+        <queriedFields>CreatedDate</queriedFields>
+        <sortField>Name</sortField>
+        <sortOrder>Desc</sortOrder>
+    </recordLookups>
+    <runInMode>DefaultMode</runInMode>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Requests</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>Salesforce Id of the partner account whose return requests to list. Comes from the agent session, not from the partner.</description>
+        <name>accountId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>allRequests</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Return_Request__c</objectType>
+    </variables>
+    <variables>
+        <name>collectedCount</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+        <value>
+            <numberValue>0.0</numberValue>
+        </value>
+    </variables>
+    <variables>
+        <name>currentRequest</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Return_Request__c</objectType>
+    </variables>
+    <variables>
+        <description>The partner's return requests, newest first, at most 10. Each has the request number (Name), order number, product name, quantity, reason, status, resolution notes and created date. Empty when the partner has no matching requests.</description>
+        <name>returnRequests</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Return_Request__c</objectType>
+    </variables>
+    <variables>
+        <description>Optional. Only list requests with this status: Submitted, Under Review, Approved, Rejected, Received or Refunded. Leave empty for all statuses.</description>
+        <name>status</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>
