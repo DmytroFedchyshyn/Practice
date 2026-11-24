@@ -29,7 +29,9 @@ instructions instead of doing them silently.
 
 ## Data and language
 
-- No secrets, tokens, usernames, org IDs or org URLs anywhere in the repository: it is public.
+- No secrets, tokens, Salesforce usernames, org IDs or org URLs anywhere in the repository: it is
+  public. The repository's own GitHub path (`owner/Practice`) is public already and may be named, as
+  the kit's `REPO_PATH` does.
 - All companies, people and data are invented.
 - Code, comments and documents in the repository are in English. Talk to the owner in Ukrainian.
 
