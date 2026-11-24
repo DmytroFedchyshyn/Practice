@@ -39,6 +39,8 @@ Decisions, pitfalls, and open questions, logged as they happen. Raw material for
 | 2026-11-24 | The kit's layers plus domain classes for rules that need no database | Keeps `ReturnPolicy`-style rules testable without data; offered to the kit as APX-43 |
 | 2026-11-24 | Prefixes `DST_` for metadata, `Dst` for shared Apex, `dst` for components | The kit's naming; renaming in a Developer Edition is cheap because the seed script rebuilds the data |
 | 2026-11-24 | Tasks in the repository's GitHub issues | The repository is on GitHub and public; the kit now supports GitHub Issues as the tracker |
+| 2026-11-24 | Build folder `force-app/distributor`; no org snapshot, `force-app/main/default` stays an empty landing folder for retrieves | The org is a Developer Edition and the build is greenfield: there is no client org to diff against |
+| 2026-11-24 | The kit's values live in `kit.env` in the project | No secrets in it; a later kit version is taken by running its `init.sh` with the same file |
 | 2026-11-24 | Deactivated the 17 Developer Edition demo products (`IsActive = false`, not deleted) | The catalogue should be the distributor's; stock search only looks at active products |
 
 ## Pitfalls
