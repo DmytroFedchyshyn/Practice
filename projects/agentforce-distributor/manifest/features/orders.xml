@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Feature Orders: generated from project.config.json by tools/feature-manifests.py; do not edit. -->
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>GetPartnerOrdersAction</members>
+        <members>GetPartnerOrdersActionTest</members>
+        <members>OrderNumbers</members>
+        <members>OrderNumbersTest</members>
+        <members>OrderSelector</members>
+        <members>PartnerOrderService</members>
+        <members>PartnerOrderServiceTest</members>
+        <name>ApexClass</name>
+    </types>
+    <version>68.0</version>
+</Package>

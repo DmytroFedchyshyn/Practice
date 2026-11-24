@@ -6,9 +6,6 @@
     },
     {
       "path": "force-app/main/default"
-    },
-    {
-      "path": "agentforce"
     }
   ],
   "name": "agentforce-distributor",

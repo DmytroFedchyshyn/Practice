@@ -1,10 +1,15 @@
 {
   "project": "agentforce-distributor",
-  "kit": { "version": "1.1.1", "commit": "4287dcd" },
+  "kit": {
+    "version": "1.1.1",
+    "commit": "4287dcd"
+  },
   "defaultBranch": "master",
   "buildDir": "force-app/distributor",
   "snapshotDir": "force-app/main/default",
-  "protectedPaths": ["force-app/"],
+  "protectedPaths": [
+    "force-app/"
+  ],
   "runbook": "docs/engineering/release-runbook.md",
   "ciOrgAlias": "agentforce-ci",
   "reviewMarker": "dst-review",
@@ -13,7 +18,71 @@
       "slug": "foundation",
       "label": "Foundation",
       "dependsOn": [],
-      "paths": ["**"]
+      "paths": [
+        "objects/**",
+        "tabs/**",
+        "roles/**",
+        "sharingRules/**",
+        "permissionsets/Distributor_Data_Admin.*",
+        "classes/SeedData.*",
+        "classes/SeedDataTest.*",
+        "classes/DistributorTestData.*"
+      ]
+    },
+    {
+      "slug": "orders",
+      "label": "Orders",
+      "dependsOn": [
+        "foundation"
+      ],
+      "paths": [
+        "classes/OrderNumbers*",
+        "classes/OrderSelector*",
+        "classes/PartnerOrderService*",
+        "classes/GetPartnerOrdersAction*"
+      ]
+    },
+    {
+      "slug": "stock",
+      "label": "Stock",
+      "dependsOn": [
+        "foundation"
+      ],
+      "paths": [
+        "classes/ProductMatcher*",
+        "classes/ProductSelector*",
+        "classes/StockLevelSelector*",
+        "classes/StockAvailabilityService*",
+        "classes/CheckProductStockAction*"
+      ]
+    },
+    {
+      "slug": "returns",
+      "label": "Returns",
+      "dependsOn": [
+        "orders",
+        "stock"
+      ],
+      "paths": [
+        "classes/Return*",
+        "classes/ContactSelector*",
+        "classes/CreateReturnRequestAction*",
+        "classes/GetReturnRequestFacts*",
+        "classes/ListReturnRequestsFlowTest*",
+        "flows/List_Return_Requests.*"
+      ]
+    },
+    {
+      "slug": "agent-access",
+      "label": "Agent access",
+      "dependsOn": [
+        "orders",
+        "stock",
+        "returns"
+      ],
+      "paths": [
+        "permissionsets/Distributor_Agent_Access.*"
+      ]
     }
   ]
 }

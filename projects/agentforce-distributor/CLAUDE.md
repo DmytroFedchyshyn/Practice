@@ -194,8 +194,9 @@ Stop and ask for explicit confirmation before:
 - Target org alias: `agentforce-dev` (Developer Edition with Agentforce and Data 360). Run `sf`, `npm`
   and `tools/` from this folder.
 - Agents, actions, prompt templates and the agent user follow `docs/engineering/agentforce.md`.
-- **Until M3 of `docs/plan.md` is done**, the existing metadata stays in `agentforce/`, split by feature
-  folder (`partners`, `orders`, `stock`, `returns`, `access`, `seed-data`) with Apex in
-  `classes/{actions,services,domain,selectors,tests}`; background in `docs/research-project-structure.md`.
-  Nothing new is added there: new metadata goes into `force-app/distributor` by the kit's rules. M3 moves
-  `agentforce/` into `force-app/distributor` and removes it.
+- The build is in `force-app/distributor`, flat by metadata type; features are the `features` of
+  `project.config.json` (foundation, orders, stock, returns, agent-access), and
+  `python3 tools/feature-manifests.py` rewrites `manifest/features/` after a component is added.
+- Documents: `docs/01-build-plan.md` (phases), `02-decisions-log.md`, `03-open-questions.md`,
+  `04-pitfalls.md`, `environments.md`, research in `docs/investigation/`.
+- Demo data: `scripts/apex/seed-data.apex` writes to the org, so it runs only after a yes.

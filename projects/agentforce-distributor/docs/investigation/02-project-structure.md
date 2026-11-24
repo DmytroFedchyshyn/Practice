@@ -1,5 +1,7 @@
 # Research: feature folders and separation of concerns (checked 2026-11-24)
 
+*Superseded by the delivery kit's layout (decisions D-28, D-30, D-31): kept as the record of why the project first chose feature folders.*
+
 ## What the platform allows
 
 - Salesforce DX resolves most metadata by file suffix, not by folder. Apex classes, flows, permission sets and object fields can sit at any depth inside a package directory. `main/default` is a convention, not a requirement.

@@ -25,10 +25,6 @@ package.xml
 **/vendor/**/*.md
 # Jest tests of the Lightning web components (docs/engineering/architecture.md §4.5): run with `npm test`, never deployed
 **/__tests__/**
-
-# Until the move onto the kit's layout (docs/plan.md, M3): the old feature-folder package directory
-# keeps its seed scripts out of deployments.
-agentforce/seed-data/scripts/**
 # LWC configuration files
 **/jsconfig.json
 **/.eslintrc.json

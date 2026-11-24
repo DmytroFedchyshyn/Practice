@@ -4,7 +4,7 @@ A hands-on reference build in a Developer Edition org with Agentforce and Data 3
 
 **Scenario.** A fictional distributor runs a partner portal on Experience Cloud. A partner logs in and asks an agent about order status, stock levels, and their requests. The agent answers from org data and Data Cloud, and performs actions. All companies and data are invented.
 
-**Working mode.** Small steps, a review stop after every phase, nothing deployed without explicit approval. Decisions and pitfalls go to [notes.md](notes.md).
+**Working mode.** Small steps, a review stop after every phase, nothing deployed without explicit approval. Decisions go to [02-decisions-log.md](02-decisions-log.md), open questions to [03-open-questions.md](03-open-questions.md), pitfalls to [04-pitfalls.md](04-pitfalls.md).
 
 ## Phase 0: Preparation
 
@@ -36,7 +36,7 @@ A hands-on reference build in a Developer Edition org with Agentforce and Data 3
 - [x] Decide: Service agent from the start, with a dedicated agent user
 - [x] Decide: the partner account comes from a session variable in phase 2; the portal sets it from the logged-in user in phase 4
 - [x] Decide: "list my return requests" is the Flow action, the rest are Apex
-- [x] Decide: Agent Script; Git holds the `AiAuthoringBundle` and the action implementations, not generated runtime metadata (see [research](research-agent-authoring.md))
+- [x] Decide: Agent Script; Git holds the `AiAuthoringBundle` and the action implementations, not generated runtime metadata (see [research](investigation/01-agent-authoring.md))
 - [x] Agent user access in the repo: permission set `Distributor_Agent_Access` (Einstein Agent licence), role `Partner_Service_Agent`, read sharing rule on `Return_Request__c` (deployed)
 - [x] First agent user, created by hand in Setup (Partner Service Agent; role, four permission sets, read access to all return requests confirmed)
 - [x] Second agent user, created with `sf org create agent-user`, to compare the two ways (role and `Distributor_Agent_Access` assigned afterwards; same record access as the first)
@@ -59,7 +59,7 @@ The project adopts the owner's Salesforce delivery kit as its base. Phase 2 resu
 - [x] M0: extend the kit — hook fixes, Agentforce metadata types, several projects in one repository, GitHub Issues as the tracker, Agentforce guidance and AGT rules, domain classes (kit 1.1.0, 1.1.1)
 - [x] M1: repository layout — `projects/agentforce-distributor/`, `exercises/`, root README and shared CLAUDE.md
 - [x] M2: copy the kit into this project with `init.sh` (prefixes `DST_` / `Dst` / `dst`, GitHub, the repository's issues; kit 1.1.1, values in `kit.env`)
-- [ ] M3: move the metadata into the kit's layout (flat by type, features in `project.config.json`), docs into the kit's documents
+- [x] M3: move the metadata into the kit's layout (flat by type, features in `project.config.json`), docs into the kit's documents (validated with 53 tests; on the local branch `meta/kit-layout`)
 - [ ] M4: foundation in code — Dml, Parameters (the return window), Logger, Switches for agent actions, test data factory, apex-mockery and SObject Fabricator; selectors and services as instances
 - [ ] M5: prefixed metadata in the org — deploy, reseed, reassign the agent users, then remove the old metadata (each step after approval)
 - [ ] M6: resume phase 2 — prompt template, Agent Script, agent tests
