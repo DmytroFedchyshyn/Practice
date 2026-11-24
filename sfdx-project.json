@@ -1,8 +1,11 @@
 {
   "packageDirectories": [
     {
-      "path": "design-patterns",
+      "path": "agentforce",
       "default": true
+    },
+    {
+      "path": "design-patterns"
     },
     {
       "path": "algorithms"
@@ -14,5 +17,5 @@
   "name": "Practice",
   "namespace": "",
   "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "60.0"
+  "sourceApiVersion": "68.0"
 }

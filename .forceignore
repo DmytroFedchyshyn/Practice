@@ -4,6 +4,9 @@
 
 package.xml
 
+# Placeholders that keep empty package directories in git
+**/.gitkeep
+
 # LWC configuration files
 **/jsconfig.json
 **/.eslintrc.json

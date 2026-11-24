@@ -1,10 +1,13 @@
 # Practice
 
-Apex practice on the Salesforce platform: classic algorithms, Gang of Four design patterns, and Trailhead exercises. Each topic is a self-contained Salesforce DX package directory, so you can deploy one topic without the others.
+Salesforce practice: Agentforce and Data Cloud, classic algorithms and Gang of Four design patterns in Apex, and Trailhead exercises. Each topic is a self-contained Salesforce DX package directory, so you can deploy one topic without the others.
 
 ## Structure
 
 ```
+agentforce/                       # package directory (default)
+                                  Agentforce agents, topics, actions and Data Cloud setup (work in progress)
+
 algorithms/                       # package directory
 ├── binary-search/                BinarySearch
 ├── breadth-first-search/         BreadthFirstSearcher
@@ -16,7 +19,7 @@ algorithms/                       # package directory
     ├── square-tiling/            SquareTilingService (Euclid's GCD)
     └── valid-parentheses/        ParenthesesValidator
 
-design-patterns/                  # package directory (default)
+design-patterns/                  # package directory
 ├── creational/
 │   ├── abstract-factory/         GUIFactory + macOS / Windows widget families
 │   ├── builder/                  Car
@@ -46,5 +49,11 @@ sf apex run test --test-level RunLocalTests --target-org practice --wait 10
 ```
 
 Swap `design-patterns` for `algorithms` or `trailhead` to deploy another topic, or deploy everything with `sf project deploy start --target-org practice`.
+
+`agentforce` is the default package directory, so metadata retrieved from an org lands there. Agentforce needs an org with Agentforce and Data Cloud enabled (for example an Agentforce Developer Edition):
+
+```bash
+sf project retrieve start --metadata Bot GenAiPlannerBundle GenAiPlugin GenAiFunction --target-org practice
+```
 
 Formatting uses Prettier with the Apex plugin: `npm install`, then `npm run prettier`.
