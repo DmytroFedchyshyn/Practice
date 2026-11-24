@@ -3,9 +3,6 @@
     {
       "path": "force-app/distributor",
       "default": true
-    },
-    {
-      "path": "force-app/main/default"
     }
   ],
   "name": "agentforce-distributor",

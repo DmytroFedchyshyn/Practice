@@ -39,6 +39,8 @@ cd "$(dirname "$0")/.."
 source tools/lib/sf-jobs.sh
 SRC="$(jq -r '.buildDir' project.config.json)"
 RUNBOOK="$(jq -r '.runbook // "docs/engineering/release-runbook.md"' project.config.json)"
+# A project without a release runbook (a practice project) gets no reminders of its steps.
+[[ -f "$RUNBOOK" ]] || RUNBOOK=""
 DEFAULT_BRANCH="$(jq -r '.defaultBranch // "main"' project.config.json)"
 
 # Each developer builds in a sandbox of their own: the default org of `sf config` on their machine.
@@ -193,7 +195,7 @@ fi
 
 # Steps the metadata cannot carry are in the release runbook, by file.
 IN_RUNBOOK=()
-for path in "${CHANGED[@]}"; do
+[[ -z "$RUNBOOK" ]] || for path in "${CHANGED[@]}"; do
   base="${path##*/}"
   ! grep -qF -- "${base%-meta.xml}" "$RUNBOOK" || IN_RUNBOOK+=("$path")
 done
@@ -206,7 +208,7 @@ if [[ "$DRY_RUN" == true ]]; then
   KIND="Validation"
   JOB="$(start_job sf project deploy start "${SOURCE_ARGS[@]}" --target-org "$ORG" --dry-run "${TEST_ARGS[@]}")"
 else
-  echo "Before you answer: the steps of $RUNBOOK §1 that these files need in $ORG are done or not needed."
+  [[ -z "$RUNBOOK" ]] || echo "Before you answer: the steps of $RUNBOOK §1 that these files need in $ORG are done or not needed."
   ask "Deploy them to $ORG?" || { echo "Stopped: nothing was written." >&2; exit 1; }
   KIND="Deployment"
   JOB="$(start_job sf project deploy start "${SOURCE_ARGS[@]}" --target-org "$ORG" "${TEST_ARGS[@]}")"
@@ -217,7 +219,7 @@ STATUS="$(job_status "$JOB")"
 case "$STATUS" in
   Succeeded)
     echo "==> $KIND $JOB passed."
-    [[ "$KIND" != Deployment ]] || echo "Now the steps of $RUNBOOK §2 that these files need in $ORG." ;;
+    [[ "$KIND" != Deployment || -z "$RUNBOOK" ]] || echo "Now the steps of $RUNBOOK §2 that these files need in $ORG." ;;
   Pending | InProgress | Unknown)
     echo "$KIND $JOB has not ended, or its status could not be read. Follow it with" >&2
     echo "sf project deploy report --job-id $JOB --target-org $ORG --wait 60" >&2

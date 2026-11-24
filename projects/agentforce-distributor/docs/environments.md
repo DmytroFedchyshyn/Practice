@@ -1,7 +1,7 @@
 # Environments
 
 **Internal · Agentforce Distributor**
-**Status:** project-owned page, as the kit's `development-foundation.md` §1.3 asks. Credentials and usernames
+**Status:** project-owned page beside the practice profile's four documents. Credentials and usernames
 never go here: the repository is public.
 
 ## Orgs

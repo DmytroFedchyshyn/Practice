@@ -1,7 +1,7 @@
 {
   "name": "agentforce-distributor",
   "private": true,
-  "description": "Code checks and unit tests for Agentforce Distributor: formatting, linting, static analysis, secret scanning and Jest for the Lightning web components, locally and in the pipeline. See docs/engineering/development-foundation.md and docs/engineering/ci-cd.md.",
+  "description": "Code checks and unit tests for Agentforce Distributor: formatting, linting, static analysis, secret scanning and Jest for the Lightning web components.",
   "engines": {
     "node": ">=22"
   },
@@ -10,7 +10,6 @@
     "format:check": "prettier --check \"force-app/distributor/**/*.{cls,trigger,js,html,css}\"",
     "lint": "eslint \"force-app/distributor/**/{aura,lwc}/**/*.js\" --no-warn-ignored --no-error-on-unmatched-pattern",
     "scan": "mkdir -p reports && sf code-analyzer run --workspace force-app/distributor --rule-selector Recommended --rule-selector pmd:Security --output-file reports/code-analyzer.html",
-    "scan:org": "mkdir -p reports && sf code-analyzer run --workspace force-app/main/default --rule-selector Recommended --rule-selector pmd:Security --output-file reports/code-analyzer-org.html",
     "secrets": "gitleaks git --redact --no-banner --verbose",
     "test": "sfdx-lwc-jest -- --passWithNoTests",
     "test:coverage": "sfdx-lwc-jest --coverage",

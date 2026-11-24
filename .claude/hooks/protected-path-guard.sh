@@ -30,6 +30,9 @@ else
     fi
 fi
 
+# No protected paths anywhere (a practice project): nothing to guard.
+[ "$(printf '%s' "$paths" | jq -c '. // []')" != "[]" ] || exit 0
+
 deny() {
     jq -n --arg reason "$1" \
         '{hookSpecificOutput: {hookEventName: "PreToolUse", permissionDecision: "deny", permissionDecisionReason: $reason}}'

@@ -39,6 +39,8 @@ cd "$(dirname "$0")/.."
 source tools/lib/sf-jobs.sh
 SRC="$(jq -r '.buildDir' project.config.json)"
 RUNBOOK="$(jq -r '.runbook // "docs/engineering/release-runbook.md"' project.config.json)"
+# A project without a release runbook (a practice project) gets no reminders of its steps.
+[[ -f "$RUNBOOK" ]] || RUNBOOK=""
 
 # A component an org cannot take refuses the whole deployment with it: a dashboard run as the viewer in an
 # org at its limit of such dashboards, site settings in an org that lacks what they name. Leaving one out,
@@ -106,10 +108,14 @@ if [[ ${#TESTS[@]} -gt 0 ]]; then
 fi
 
 deploy_later() {
-  echo "The validation can be deployed within 10 days, without running the tests again, once the steps of"
-  echo "$RUNBOOK §1 for $ORG and the switch-off checklist in §1.1 are done or not needed:"
+  if [[ -n "$RUNBOOK" ]]; then
+    echo "The validation can be deployed within 10 days, without running the tests again, once the steps of"
+    echo "$RUNBOOK §1 for $ORG and the switch-off checklist in §1.1 are done or not needed:"
+  else
+    echo "The validation can be deployed within 10 days, without running the tests again:"
+  fi
   echo "  sf project deploy quick --job-id $VALIDATION --target-org $ORG"
-  echo "Then the post-deployment steps of §2."
+  [[ -z "$RUNBOOK" ]] || echo "Then the post-deployment steps of §2."
 }
 
 check_queue "this validation" || { echo "Stopped: nothing was validated." >&2; exit 1; }
@@ -138,8 +144,8 @@ if [[ "$MODE" != "--deploy" ]]; then
 fi
 
 check_queue "the deployment" || { echo "Stopped: nothing was deployed." >&2; deploy_later; exit 1; }
-echo "Before you answer: the steps of $RUNBOOK §1 for $ORG, and the switch-off checklist in §1.1, are done or not needed."
-[[ -z "$FEATURE" ]] || echo "A feature is a partial deployment: the features it depends on (dependsOn in project.config.json) are already in $ORG ($RUNBOOK §4)."
+[[ -z "$RUNBOOK" ]] || echo "Before you answer: the steps of $RUNBOOK §1 for $ORG, and the switch-off checklist in §1.1, are done or not needed."
+[[ -z "$FEATURE" || -z "$RUNBOOK" ]] || echo "A feature is a partial deployment: the features it depends on (dependsOn in project.config.json) are already in $ORG ($RUNBOOK §4)."
 ask "Validation passed. Deploy $WHAT to $ORG for real?" || { echo "Stopped: nothing was deployed." >&2; deploy_later; exit 1; }
 
 echo "==> Deploying validation $VALIDATION to $ORG — its tests are not run again"
@@ -149,10 +155,10 @@ echo "Deployment $DEPLOYMENT started. Should this script stop, follow it with: s
 follow_job "$DEPLOYMENT"
 STATUS="$(job_status "$DEPLOYMENT")"
 case "$STATUS" in
-  Succeeded) echo "==> Done. Now the post-deployment steps for $ORG: $RUNBOOK §2" ;;
+  Succeeded) echo "==> Done.${RUNBOOK:+ Now the post-deployment steps for $ORG: $RUNBOOK §2}" ;;
   Pending | InProgress | Unknown)
     echo "Deployment $DEPLOYMENT has not ended, or its status could not be read. Follow it with" >&2
-    echo "sf project deploy report --job-id $DEPLOYMENT --target-org $ORG --wait 60; once it has succeeded, the post-deployment steps of $RUNBOOK §2" >&2
+    echo "sf project deploy report --job-id $DEPLOYMENT --target-org $ORG --wait 60${RUNBOOK:+; once it has succeeded, the post-deployment steps of $RUNBOOK §2}" >&2
     exit 1 ;;
   *) echo "Deployment $DEPLOYMENT: $STATUS. See the result above." >&2; exit 1 ;;
 esac
