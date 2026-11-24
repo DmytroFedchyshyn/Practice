@@ -61,6 +61,10 @@ The bulk test for return requests failed with "Too many SOQL queries: 101" altho
 
 `(SELECT Id FROM Orders ORDER BY EffectiveDate DESC LIMIT :RECENT_ORDER_LIMIT)` compiles and runs, so the per-account limit can be a named constant instead of a magic number.
 
+### Permission set licences are assigned with the permission set (2026-11-24)
+
+When creating the agent user in Setup, the "Einstein Prompt Templates" permission set licence did not need a separate step: assigning the `Prompt Template User` permission set assigned its licence automatically. Look for permission sets, not licences, in the assignment list. Check afterwards with `UserRecordAccess`: the agent user reads every return request and order but cannot edit orders, because the permission set grants read only even though the org-wide default is Read/Write.
+
 ### Role and permission set metadata have tight limits (2026-11-24)
 
 A permission set description is at most 255 characters and a role description at most 80. A role's opportunity and case access levels cannot be below the org-wide default (here `Edit`, because both objects are Public Read/Write). A sharing rule that targets a role in the same deploy fails with "no Role named ... found" when the role itself fails; fix the role first.
