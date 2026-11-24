@@ -118,3 +118,12 @@ update the data type to 'object' type and 'complex_data_type_name' to 'lightning
 an `Id` output. Validate checks the script, not the actions it points at; the preview checks both. Inputs of type
 `String` in Apex, a flow or a prompt template stay `string`.
 
+## An agent user without price book access cannot see order lines (2026-11-25)
+
+In the agent's live test, `get_partner_orders` failed with "Didn't understand relationship 'OrderItems' in FROM part
+of query call". The query runs in user mode as the agent user, and that user had read on Order and Product2 but not
+on Pricebook2: without it, order products are not visible at all, and the platform reports the relationship as
+unknown rather than as an access refusal. Read on Pricebook2 fixed it. Read on `Product2.IsActive`, which the
+product search filters on, was missing too. A probe test run as the agent user in a validation reproduced the
+error with the old permission set and passed with the new one.
+
