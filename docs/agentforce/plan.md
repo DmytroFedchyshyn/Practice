@@ -39,7 +39,7 @@ A hands-on reference build in a Developer Edition org with Agentforce and Data 3
 - [x] Decide: Agent Script; Git holds the `AiAuthoringBundle` and the action implementations, not generated runtime metadata (see [research](research-agent-authoring.md))
 - [ ] Agent user, created by hand in Setup, plus a permission set for it in the repo
 - [x] Apex service layer and invocable wrappers: order status, stock availability, create return request (validated, not deployed)
-- [x] Flow action: list the partner's return requests (`List_Return_Requests`, record collection output, Apex test; validated, not deployed)
+- [x] Flow action: list the partner's return requests (`List_Return_Requests`, record collection output, Apex test; deployed and smoke-tested)
 - [ ] Confirm in the agent that a record collection works as a Flow action output; if not, switch to a text output
 - [ ] Prompt template grounded on org data
 - [x] Apex tests for the service layer and wrappers (28 tests with the seed tests)
