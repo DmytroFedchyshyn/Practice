@@ -65,6 +65,20 @@ The bulk test for return requests failed with "Too many SOQL queries: 101" altho
 
 When creating the agent user in Setup, the "Einstein Prompt Templates" permission set licence did not need a separate step: assigning the `Prompt Template User` permission set assigned its licence automatically. Look for permission sets, not licences, in the assignment list. Check afterwards with `UserRecordAccess`: the agent user reads every return request and order but cannot edit orders, because the permission set grants read only even though the org-wide default is Read/Write.
 
+### Agent user in Setup versus `sf org create agent-user` (2026-11-24)
+
+| | Setup (by hand) | `sf org create agent-user` |
+| --- | --- | --- |
+| Licence and profile | Einstein Agent, Einstein Agent User | Same |
+| Permission set licences | Agentforce Service Agent User, Einstein Prompt Templates (assigned with the permission sets) | Same |
+| Base permission set | Agentforce Service Agent Secure Base: read and create Case, read and edit Contact, read MessagingEndUser, read and edit MessagingSession | Agentforce Service Agent Object Access (`AgentforceServiceAgentBase`): no object permissions in this org |
+| Other permission sets | Agentforce Service Agent User, Prompt Template User, plus our own | Agentforce Service Agent User, Prompt Template User |
+| Role | Chosen on the form | None; assign it afterwards |
+| Username and email | Typed by hand | Generated, globally unique; email = username |
+| Password | None if "notify user" is unchecked | None |
+
+The CLI is one repeatable command, good for scripts and scratch orgs; it still leaves the project's permission set and role to assign. Setup shows every choice, which helps when learning. Neither stores the user in the repo: users are data, not metadata.
+
 ### Role and permission set metadata have tight limits (2026-11-24)
 
 A permission set description is at most 255 characters and a role description at most 80. A role's opportunity and case access levels cannot be below the org-wide default (here `Edit`, because both objects are Public Read/Write). A sharing rule that targets a role in the same deploy fails with "no Role named ... found" when the role itself fails; fix the role first.
