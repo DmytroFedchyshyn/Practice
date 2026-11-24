@@ -23,6 +23,9 @@ Decisions, pitfalls, and open questions, logged as they happen. Raw material for
 | 2026-11-24 | Return policy in code: delivered, within 30 days, product on the order, quantity not above ordered minus open requests | Deterministic rules belong in Apex, not in prompt instructions |
 | 2026-11-24 | Feature folders inside the one `agentforce` package directory, not one package directory per feature | Features share objects and permission sets; nothing is packaged yet |
 | 2026-11-24 | Layers as plain classes (`actions`, `services`, `domain`, `selectors`), no fflib | Same separation without a library dependency; fflib can be a separate exercise |
+| 2026-11-24 | The Flow action returns a `Return_Request__c` record collection: all statuses with an optional status filter, newest 10 | Tries the documented `list[object]` output; the agent picks the fields to show |
+| 2026-11-24 | Formula fields `Order_Number__c` and `Product_Name__c` on `Return_Request__c` | Flow Get Records cannot read relationship fields; without them the agent would show Ids |
+| 2026-11-24 | The flow runs in `DefaultMode` | A flow action runs in user context, so sharing and field access of the agent user (and later the partner) apply |
 | 2026-11-24 | Deactivated the 17 Developer Edition demo products (`IsActive = false`, not deleted) | The catalogue should be the distributor's; stock search only looks at active products |
 
 ## Pitfalls
@@ -81,6 +84,7 @@ All tests passed, but the first run against the org showed the stock action's "t
 ## Open questions
 
 - **Agent identity on the site.** One help page says credential-based user verification makes a Service agent on an Experience Cloud site run as the logged-in site user. Another says user verification is supported only on an external website and a few Aura templates (Build Your Own Aura, Help Center, Customer Service). Resolve before phase 4: it drives the template choice and how we prove a partner sees only their own account.
+- **Record collections as Flow action outputs.** The Agent Script reference allows `list[object]` outputs with a `complex_data_type_name` ([Actions](https://developer.salesforce.com/docs/ai/agentforce/guide/ascript-ref-actions.html)). The help page [Agentforce Considerations](https://help.salesforce.com/s/articleView?id=ai.copilot_considerations.htm&language=en_US&type=5) says custom actions on Apex or Flow support only primitive types and that a flow with a collection resource cannot be used. `List_Return_Requests` tests this; check it when the action is added to the agent.
 
 ## References
 
