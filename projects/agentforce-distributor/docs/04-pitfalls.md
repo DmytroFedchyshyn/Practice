@@ -110,3 +110,11 @@ object names were not recognized: apex.getreturnrequestfactsaction"). The templa
 `force-app/distributor/main/default/genAiPromptTemplates/`, not `force-app/distributor/genAiPromptTemplates/`: the
 CLI adds `main/default` for a type the folder does not hold yet. Move the file up and delete the empty folders.
 
+## An Apex Id input is an object of type lightning__recordIdType in Agent Script (2026-11-25)
+
+`sf agent validate authoring-bundle` accepted `"accountId": string` for an `@InvocableVariable` of type `Id`, but
+the Agentforce Builder's preview refused the agent: "invalid data type for the input parameter 'accountId'. To fix,
+update the data type to 'object' type and 'complex_data_type_name' to 'lightning__recordIdType'". The same holds for
+an `Id` output. Validate checks the script, not the actions it points at; the preview checks both. Inputs of type
+`String` in Apex, a flow or a prompt template stay `string`.
+

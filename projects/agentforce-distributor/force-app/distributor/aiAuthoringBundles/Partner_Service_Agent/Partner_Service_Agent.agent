@@ -67,11 +67,12 @@ subagent orders:
             include_in_progress_indicator: True
             target: "apex://GetPartnerOrdersAction"
             inputs:
-                "accountId": string
+                "accountId": object
                     description: "ID of the partner account whose orders to read."
                     label: "Partner Account ID"
                     is_required: True
                     is_user_input: False
+                    complex_data_type_name: "lightning__recordIdType"
                 "orderNumber": string
                     description: "Order number to look up, for example 00000103 or 103. Leave empty to get the partner's most recent orders."
                     label: "Order Number"
@@ -223,11 +224,12 @@ subagent returns:
             include_in_progress_indicator: True
             target: "apex://CreateReturnRequestAction"
             inputs:
-                "accountId": string
+                "accountId": object
                     description: "ID of the partner account that returns the product."
                     label: "Partner Account ID"
                     is_required: True
                     is_user_input: False
+                    complex_data_type_name: "lightning__recordIdType"
                 "orderNumber": string
                     description: "Number of the delivered order, for example 00000103 or 103."
                     label: "Order Number"
@@ -274,11 +276,12 @@ subagent returns:
                     label: "Return Request Number"
                     is_displayable: False
                     filter_from_agent: False
-                "recordId": string
+                "recordId": object
                     description: "Record ID of the new return request."
                     label: "Return Request ID"
                     is_displayable: False
                     filter_from_agent: True
+                    complex_data_type_name: "lightning__recordIdType"
 
 subagent off_topic:
     label: "Off Topic"
