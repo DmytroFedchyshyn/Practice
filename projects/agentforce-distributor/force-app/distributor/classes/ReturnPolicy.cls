@@ -20,7 +20,7 @@ public with sharing class ReturnPolicy {
         'Submitted' => 'The returns team reviews new requests within 2 business days.',
         'Under Review' => 'The returns team is checking the request and answers the requester by email.',
         'Approved' => 'Send the product back with the prepaid return label that the requester received by email.',
-        'Rejected' => 'The request is closed. The resolution notes give the reason. A new request can be made if the policy allows it.',
+        'Rejected' => 'The request is closed. The resolution notes give the reason.',
         'Received' => 'The warehouse has the product. The refund is issued within 5 business days.',
         'Refunded' => 'The refund is issued. Nothing else is needed.'
     };
