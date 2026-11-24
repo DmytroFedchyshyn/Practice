@@ -43,7 +43,7 @@ A hands-on reference build in a Developer Edition org with Agentforce and Data 3
 - [ ] Prompt template grounded on org data
 - [x] Apex tests for the service layer and wrappers (28 tests with the seed tests)
 - [x] Reorganize into feature folders with selector and domain layers (40 tests, validated)
-- [ ] Deploy the Apex actions (after approval)
+- [x] Deploy the Apex actions (61 components, 40 tests) and smoke-test the read-only actions on org data
 - [ ] Agent Script: system block, subagents (orders, stock, returns), instructions, actions
 - [ ] Validate and preview locally, then publish and activate (after approval)
 - [ ] Agent tests (`AiEvaluationDefinition` / Testing Center)

@@ -124,11 +124,14 @@ public with sharing class StockAvailabilityService {
         return stock;
     }
 
+    /** The first MAX_MATCHES products, then how many more, so the message stays short. */
     private static String names(List<Product2> products) {
         List<String> labels = new List<String>();
-        for (Product2 product : products) {
-            labels.add(product.Name + ' (' + product.ProductCode + ')');
+        for (Integer i = 0; i < Math.min(products.size(), MAX_MATCHES); i++) {
+            labels.add(products[i].Name + ' (' + products[i].ProductCode + ')');
         }
-        return String.join(labels, ', ');
+        String listed = String.join(labels, ', ');
+        Integer more = products.size() - labels.size();
+        return more > 0 ? listed + ' and ' + more + ' more' : listed;
     }
 }

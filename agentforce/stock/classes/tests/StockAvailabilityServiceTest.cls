@@ -49,6 +49,8 @@ private class StockAvailabilityServiceTest {
         Assert.isFalse(result.success);
         Assert.areEqual('AMBIGUOUS_PRODUCT', result.errorCode);
         Assert.isTrue(result.message.contains('DST-1001'), 'The message lists the matches');
+        Assert.isTrue(result.message.contains('matches 7 products'), result.message);
+        Assert.isTrue(result.message.endsWith(' and 2 more.'), 'Only the first ' + StockAvailabilityService.MAX_MATCHES + ' are listed: ' + result.message);
         Assert.isTrue(result.products.isEmpty());
     }
 

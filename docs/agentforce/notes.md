@@ -54,6 +54,10 @@ The bulk test for return requests failed with "Too many SOQL queries: 101" altho
 
 `(SELECT Id FROM Orders ORDER BY EffectiveDate DESC LIMIT :RECENT_ORDER_LIMIT)` compiles and runs, so the per-account limit can be a named constant instead of a magic number.
 
+### Test data hides what the real org contains (2026-11-24)
+
+All tests passed, but the first run against the org showed the stock action's "too many matches" message listing 20 products: the Developer Edition ships 17 demo products (GenWatt generators, installation and SLA products) that the isolated test data never sees. Fixes: the message now lists at most five matches plus "and N more". Lesson: after deploying an agent action, run it once against real org data before trusting the tests.
+
 ## Phase 0 findings (Developer Edition, API 68.0)
 
 - Licences are present for the whole plan: Partner Community and Customer Community (5 each), Agentforce Service Agent User, Enhanced Chat User, Data Cloud, Prompt Templates.
