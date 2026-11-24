@@ -29,6 +29,10 @@ Decisions, pitfalls, and open questions, logged as they happen. Raw material for
 | 2026-11-24 | Agent user access lives in the repo: `Distributor_Agent_Access` on the Einstein Agent licence, not the generated `[Agent]_Permissions` set | Versioned and reviewed with the actions it unlocks; the help page requires the Einstein Agent licence for a custom set |
 | 2026-11-24 | `Return_Request__c` stays Private; a sharing rule gives the `Partner_Service_Agent` role read access to all requests | Recommended by the help page; other internal users keep their access; actions scope results to the session's account |
 | 2026-11-24 | Two agent users: the first created in Setup, the second with `sf org create agent-user` | Learn both ways; the Einstein Agent licence has 201 seats in the Developer Edition |
+| 2026-11-24 | Prompt template: Flex `Explain_Return_Request` explains one return request to the partner | Shows a prompt template action next to Apex and Flow actions; tone and wording belong in a prompt, facts and rules in code |
+| 2026-11-24 | Template inputs are free text (`requestNumber`, `accountId`), not a record | The partner types a number; the account comes from the session; Apex filters by account, so another partner's request looks missing |
+| 2026-11-24 | Grounding through an Apex class (`GetReturnRequestFactsAction`), no `CapabilityType` | The help page says `CapabilityType` is no longer needed; the class reuses the selector and the return policy and is unit-tested |
+| 2026-11-24 | Next steps per return status are invented business rules in `ReturnPolicy` | The company is fictional; keeping them in code keeps the prompt free of policy text |
 | 2026-11-24 | Deactivated the 17 Developer Edition demo products (`IsActive = false`, not deleted) | The catalogue should be the distributor's; stock search only looks at active products |
 
 ## Pitfalls
@@ -110,6 +114,7 @@ All tests passed, but the first run against the org showed the stock action's "t
 
 - **Agent identity on the site.** One help page says credential-based user verification makes a Service agent on an Experience Cloud site run as the logged-in site user. Another says user verification is supported only on an external website and a few Aura templates (Build Your Own Aura, Help Center, Customer Service). Resolve before phase 4: it drives the template choice and how we prove a partner sees only their own account.
 - **Record collections as Flow action outputs.** The Agent Script reference allows `list[object]` outputs with a `complex_data_type_name` ([Actions](https://developer.salesforce.com/docs/ai/agentforce/guide/ascript-ref-actions.html)). The help page [Agentforce Considerations](https://help.salesforce.com/s/articleView?id=ai.copilot_considerations.htm&language=en_US&type=5) says custom actions on Apex or Flow support only primitive types and that a flow with a collection resource cannot be used. `List_Return_Requests` tests this; check it when the action is added to the agent.
+- **Prompt template action target.** The Agent Script reference lists `prompt://<Template>`; the [PromptTemplateActions recipe](https://developer.salesforce.com/sample-apps/agent-script-recipes/action-configuration/prompt-template-actions) uses `generatePromptResponse://<Template>` with inputs named `"Input:<apiName>"` and the output `promptResponse`. Check with `sf agent validate`.
 
 ## References
 
