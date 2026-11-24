@@ -30,6 +30,31 @@ public inherited sharing class ReturnRequestSelector {
         return new Map<Id, Return_Request__c>([SELECT Id, Name, Status__c FROM Return_Request__c WHERE Id IN :requestIds WITH USER_MODE]);
     }
 
+    /** Requests with everything needed to explain them to a partner, including the order's delivery date. */
+    public static List<Return_Request__c> selectWithOrderByNumbers(Set<String> requestNumbers) {
+        if (requestNumbers.isEmpty()) {
+            return new List<Return_Request__c>();
+        }
+        return [
+            SELECT
+                Id,
+                Name,
+                Account__c,
+                Status__c,
+                Reason__c,
+                Quantity__c,
+                Description__c,
+                Resolution_Notes__c,
+                Order_Number__c,
+                Product_Name__c,
+                CreatedDate,
+                Order__r.Delivered_Date__c
+            FROM Return_Request__c
+            WHERE Name IN :requestNumbers
+            WITH USER_MODE
+        ];
+    }
+
     public static String key(Id orderId, Id productId) {
         return String.valueOf(orderId) + ':' + String.valueOf(productId);
     }

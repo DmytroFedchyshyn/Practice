@@ -48,6 +48,14 @@ private class ReturnPolicyTest {
     }
 
     @IsTest
+    static void everyStatusHasANextStep() {
+        for (Schema.PicklistEntry status : Return_Request__c.Status__c.getDescribe().getPicklistValues()) {
+            Assert.areNotEqual(ReturnPolicy.nextStep('unknown'), ReturnPolicy.nextStep(status.getValue()), 'Missing next step for ' + status.getValue());
+        }
+        Assert.isTrue(ReturnPolicy.nextStep(null).startsWith('Contact the returns team'));
+    }
+
+    @IsTest
     static void limitsQuantityToWhatIsLeft() {
         Assert.isNull(ReturnPolicy.checkQuantity('00000001', 'Drill', 8, 1, 7), 'Exactly what is left');
 

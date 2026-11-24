@@ -16,6 +16,10 @@
         <apexClass>GetPartnerOrdersAction</apexClass>
         <enabled>true</enabled>
     </classAccesses>
+    <classAccesses>
+        <apexClass>GetReturnRequestFactsAction</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
     <fieldPermissions>
         <editable>false</editable>
         <field>Order.Delivered_Date__c</field>
