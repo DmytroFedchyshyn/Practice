@@ -33,14 +33,18 @@ A hands-on reference build in a Developer Edition org with Agentforce and Data 3
 
 ## Phase 2: Agentforce
 
-- [ ] Decide: Agent Script (`AiAuthoringBundle`) versus classic planner metadata
-- [ ] Agent, topics, instructions
-- [ ] Apex custom actions: invocable, bulk-safe, clear errors, logic in a service layer with a thin wrapper
-- [ ] One Flow action, for comparison with Apex
+- [x] Decide: Service agent from the start, with a dedicated agent user
+- [x] Decide: the partner account comes from a session variable in phase 2; the portal sets it from the logged-in user in phase 4
+- [x] Decide: "list my return requests" is the Flow action, the rest are Apex
+- [ ] Decide: Agent Script authoring bundle and what goes into Git (see research in notes)
+- [ ] Agent user, created by hand in Setup, plus a permission set for it in the repo
+- [ ] Apex service layer and invocable wrappers: order status, stock availability, create return request
+- [ ] Flow action: list the partner's return requests
 - [ ] Prompt template grounded on org data
-- [ ] Apex tests for actions
-- [ ] Agent tests in Testing Center (`AiEvaluationDefinition`)
-- [ ] Agent and its parts live in the repo as metadata and deploy through `sf`
+- [ ] Apex tests for the service layer and wrappers
+- [ ] Agent Script: system block, subagents (orders, stock, returns), instructions, actions
+- [ ] Validate and preview locally, then publish and activate (after approval)
+- [ ] Agent tests (`AiEvaluationDefinition` / Testing Center)
 
 ## Phase 3: Data Cloud
 
