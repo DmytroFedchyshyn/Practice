@@ -27,9 +27,9 @@ A hands-on reference build in a Developer Edition org with Agentforce and Data 3
 - [x] Deploy the data model
 - [x] Assign `Distributor_Data_Admin` to the admin user
 - [x] Seed script: partner accounts and contacts, products and price book entries, warehouses and stock, orders in every fulfillment status, return requests
-- [x] Apex test for the seed script (validated against the org, not deployed yet)
-- [ ] Deploy `SeedData` and `SeedDataTest` (after approval)
-- [ ] Load data (after approval)
+- [x] Apex test for the seed script
+- [x] Deploy `SeedData` and `SeedDataTest`
+- [x] Load data: 3 partners, 6 contacts, 8 products, 2 warehouses, 16 stock levels, 18 orders, 36 order lines, 3 return requests
 
 ## Phase 2: Agentforce
 
