@@ -4,7 +4,7 @@ A hands-on reference build in a Developer Edition org with Agentforce and Data 3
 
 **Scenario.** A fictional distributor runs a partner portal on Experience Cloud. A partner logs in and asks an agent about order status, stock levels, and their requests. The agent answers from org data and Data Cloud, and performs actions. All companies and data are invented.
 
-**Working mode.** Small steps, a review stop after every phase, nothing deployed without explicit approval. Decisions go to [02-decisions-log.md](02-decisions-log.md), open questions to [03-open-questions.md](03-open-questions.md), pitfalls to [04-pitfalls.md](04-pitfalls.md).
+**Working mode.** Small steps, a review stop after every phase, nothing deployed without explicit approval. Decisions go to [02-decisions-log.md](02-decisions-log.md), open questions to [03-open-questions.md](03-open-questions.md), pitfalls to [04-pitfalls.md](04-pitfalls.md). The code follows [rules.md](rules.md) and the owner's choices in `CLAUDE.md` §6.
 
 ## Phase 0: Preparation
 
@@ -54,14 +54,15 @@ A hands-on reference build in a Developer Edition org with Agentforce and Data 3
 
 ## Move onto the delivery kit (inside phase 2)
 
-The project adopts the owner's Salesforce delivery kit as its base. Phase 2 resumes after M5.
+The project adopts the owner's Salesforce delivery kit as its base, since kit 1.2.0 with its practice profile. Phase 2 resumes with M6.
 
 - [x] M0: extend the kit — hook fixes, Agentforce metadata types, several projects in one repository, GitHub Issues as the tracker, Agentforce guidance and AGT rules, domain classes (kit 1.1.0, 1.1.1)
 - [x] M1: repository layout — `projects/agentforce-distributor/`, `exercises/`, root README and shared CLAUDE.md
 - [x] M2: copy the kit into this project with `init.sh` (prefixes `DST_` / `Dst` / `dst`, GitHub, the repository's issues; kit 1.1.1, values in `kit.env`)
 - [x] M3: move the metadata into the kit's layout (flat by type, features in `project.config.json`), docs into the kit's documents (validated with 53 tests; on the local branch `meta/kit-layout`)
-- [ ] M4: foundation in code (M4a `DstDml` done and deployed, PR #2; M4b Parameters, M4c Switches, M4d trigger base and Logger, M4e test data factory and libraries to go) — — Dml, Parameters (the return window), Logger, Switches for agent actions, test data factory, apex-mockery and SObject Fabricator; selectors and services as instances
-- [ ] M5: prefixed metadata in the org — deploy, reseed, reassign the agent users, then remove the old metadata (each step after approval)
+- [x] M4a: `DstDml`, every write through it (PR #2, deployed). The rest of M4 — Parameters, Switches, Logger, test libraries — is not done: the practice profile does not ask for it (D-44)
+- [x] ~~M5: prefixed metadata in the org~~ — dropped: the practice profile asks for no prefixes; names stay as they are (D-45)
+- [x] Practice profile: the project moves from the kit's delivery profile to its practice profile (kit 1.2.0, D-43)
 - [ ] M6: resume phase 2 — prompt template, Agent Script, agent tests
 
 ## Phase 3: Data Cloud
