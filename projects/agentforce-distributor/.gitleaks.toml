@@ -11,3 +11,12 @@ paths = ['''staticresources/[^/]+/webruntime/''']
 description = "Experience Cloud site config: the ids of the site's routes and views, not keys"
 regexTarget = "line"
 regexes = ['''"[A-Za-z]+(Route|View)Id"\s*:''']
+
+# The agent user's username must not reach the public repository: .agent files hold the placeholder AGENT_USER,
+# and tools/agent-user.sh swaps the real one in only for a deploy, validate or publish.
+[[rules]]
+id = "salesforce-agent-user"
+description = "A Salesforce username in an Agent Script access block"
+regex = '''default_agent_user:\s*"[^"]*@[^"]*"'''
+path = '''\.agent$'''
+keywords = ["default_agent_user"]

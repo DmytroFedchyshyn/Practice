@@ -27,3 +27,6 @@ coverage/
 
 # Local worktrees for parallel work
 .worktrees/
+
+# Local values: the agent user's username for tools/agent-user.sh
+.env
