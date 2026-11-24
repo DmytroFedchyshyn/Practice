@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPromptTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <activeVersionIdentifier>c3m7G879ONTz7YV3p+nyAu6ICmUEqABCuUTcwnowNpM=_1</activeVersionIdentifier>
+    <description>Explains one return request of a partner: status, reason and next step, from the distributor&apos;s records.</description>
+    <developerName>Explain_Return_Request</developerName>
+    <masterLabel>Explain Return Request</masterLabel>
+    <overridable>false</overridable>
+    <templateVersions>
+        <content>You are the returns assistant of a distributor&apos;s partner portal. You reply to a partner about one of their return requests. Address the partner as &quot;you&quot;.
+​Facts about the request, from the distributor&apos;s records:
+{{Apex.GetReturnRequestFactsAction.Prompt}}
+​Write the reply as follows:
+- If the facts say that no request was found or that no number was given, write exactly two sentences: that no return request with this number was found for them, and a request to check the number, for example RR-00012. Write nothing else.
+- Otherwise, the first sentence states the status of the request.
+- Then explain why, using only what the facts state: the dates, the return policy and the resolution notes. Do not add checks or reasons the facts do not state.
+- Do not repeat the partner&apos;s own description back to them.
+- The last sentence is the next step from the facts.
+- At most four sentences, in plain business English, without internal codes, record Ids or closing pleasantries.
+​⁠</content>
+        <fileDroppingStrategy>{&quot;dropFilesBy&quot;:&quot;LAST_MODIFIED_DATE&quot;,&quot;dropFileStartingWith&quot;:&quot;OLDEST&quot;}</fileDroppingStrategy>
+        <inputs>
+            <apiName>requestNumber</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>requestNumber</masterLabel>
+            <referenceName>Input.requestNumber</referenceName>
+            <required>true</required>
+        </inputs>
+        <inputs>
+            <apiName>accountId</apiName>
+            <definition>primitive://String</definition>
+            <masterLabel>accountId</masterLabel>
+            <referenceName>Input.accountId</referenceName>
+            <required>true</required>
+        </inputs>
+        <isCitationEnabled>false</isCitationEnabled>
+        <primaryModel>sfdc_ai__DefaultGPT5Mini</primaryModel>
+        <status>Published</status>
+        <templateDataProviders>
+            <definition>apex://GetReturnRequestFactsAction</definition>
+            <description>Returns the status, order, product, dates, resolution notes, next step and return policy for one return request of a partner.</description>
+            <label>Get Return Request Facts</label>
+            <parameters>
+                <definition>primitive://String</definition>
+                <isRequired>false</isRequired>
+                <parameterName>requestNumber</parameterName>
+                <valueExpression>{{Input.requestNumber}}</valueExpression>
+            </parameters>
+            <parameters>
+                <definition>primitive://String</definition>
+                <isRequired>false</isRequired>
+                <parameterName>accountId</parameterName>
+                <valueExpression>{{Input.accountId}}</valueExpression>
+            </parameters>
+            <referenceName>Apex.GetReturnRequestFactsAction</referenceName>
+        </templateDataProviders>
+        <templateFormat>Jinja</templateFormat>
+        <versionIdentifier>c3m7G879ONTz7YV3p+nyAu6ICmUEqABCuUTcwnowNpM=_1</versionIdentifier>
+    </templateVersions>
+    <type>einstein_gpt__flex</type>
+    <visibility>Global</visibility>
+</GenAiPromptTemplate>
