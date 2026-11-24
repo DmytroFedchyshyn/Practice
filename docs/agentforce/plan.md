@@ -42,6 +42,7 @@ A hands-on reference build in a Developer Edition org with Agentforce and Data 3
 - [ ] Flow action: list the partner's return requests
 - [ ] Prompt template grounded on org data
 - [x] Apex tests for the service layer and wrappers (28 tests with the seed tests)
+- [x] Reorganize into feature folders with selector and domain layers (40 tests, validated)
 - [ ] Deploy the Apex actions (after approval)
 - [ ] Agent Script: system block, subagents (orders, stock, returns), instructions, actions
 - [ ] Validate and preview locally, then publish and activate (after approval)

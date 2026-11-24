@@ -8,8 +8,7 @@ package.xml
 **/.gitkeep
 
 # Seed data and scripts that live inside a package directory
-agentforce/data/**
-agentforce/scripts/**
+agentforce/seed-data/scripts/**
 
 # LWC configuration files
 **/jsconfig.json

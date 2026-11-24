@@ -81,16 +81,6 @@ private class PartnerOrderServiceTest {
     }
 
     @IsTest
-    static void normalizesOrderNumbers() {
-        Assert.areEqual('00000103', PartnerOrderService.normalizeOrderNumber('103'));
-        Assert.areEqual('00000103', PartnerOrderService.normalizeOrderNumber('order #103'));
-        Assert.areEqual('00000103', PartnerOrderService.normalizeOrderNumber('00000103'));
-        Assert.areEqual('123456789', PartnerOrderService.normalizeOrderNumber('123456789'));
-        Assert.areEqual('abc', PartnerOrderService.normalizeOrderNumber(' abc '), 'No digits: kept as is, so it matches nothing');
-        Assert.isNull(PartnerOrderService.normalizeOrderNumber(' '));
-    }
-
-    @IsTest
     static void bulkLookupUsesAFixedNumberOfQueries() {
         List<Order> orders = [SELECT AccountId, OrderNumber FROM Order];
         List<PartnerOrderService.OrderLookup> lookups = new List<PartnerOrderService.OrderLookup>();

@@ -21,6 +21,8 @@ Decisions, pitfalls, and open questions, logged as they happen. Raw material for
 | 2026-11-24 | Services query and insert in user mode (`WITH USER_MODE`, `AccessLevel.USER_MODE`) and are `with sharing` | The agent user's and, in phase 4, the partner's own permissions decide what is visible |
 | 2026-11-24 | An order of another partner gets the same answer as a missing order | The agent cannot be used to probe which order numbers exist |
 | 2026-11-24 | Return policy in code: delivered, within 30 days, product on the order, quantity not above ordered minus open requests | Deterministic rules belong in Apex, not in prompt instructions |
+| 2026-11-24 | Feature folders inside the one `agentforce` package directory, not one package directory per feature | Features share objects and permission sets; nothing is packaged yet |
+| 2026-11-24 | Layers as plain classes (`actions`, `services`, `domain`, `selectors`), no fflib | Same separation without a library dependency; fflib can be a separate exercise |
 
 ## Pitfalls
 
@@ -47,6 +49,10 @@ The services query `WITH USER_MODE`, so a test that runs as the deploying admin 
 ### A test helper can blow the SOQL limit that the code under test respects (2026-11-24)
 
 The bulk test for return requests failed with "Too many SOQL queries: 101" although the service itself uses four. The test's own input helper looked up the account on every call, 180 times. Fix: look up once outside the loop. Lesson: measure the code under test with `Limits.getQueries()` before and after, and keep test helpers out of loops too.
+
+### Bind variables work in a subquery LIMIT (2026-11-24)
+
+`(SELECT Id FROM Orders ORDER BY EffectiveDate DESC LIMIT :RECENT_ORDER_LIMIT)` compiles and runs, so the per-account limit can be a named constant instead of a magic number.
 
 ## Phase 0 findings (Developer Edition, API 68.0)
 
