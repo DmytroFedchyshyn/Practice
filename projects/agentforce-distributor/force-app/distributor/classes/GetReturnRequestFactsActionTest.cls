@@ -18,12 +18,15 @@ private class GetReturnRequestFactsActionTest {
         input.accountId = request.Account__c;
 
         List<GetReturnRequestFactsAction.Response> responses;
+        // "Today" is the running user's date, which near midnight differs between time zones.
+        Date today;
         System.runAs(DistributorTestData.dataAdmin()) {
             responses = GetReturnRequestFactsAction.run(new List<GetReturnRequestFactsAction.Request>{ input });
+            today = Date.today();
         }
 
         Assert.areEqual(1, responses.size());
         Assert.isTrue(responses[0].Prompt.contains('Status: Rejected'), responses[0].Prompt);
-        Assert.isTrue(responses[0].Prompt.contains('Today: ' + String.valueOf(Date.today())), responses[0].Prompt);
+        Assert.isTrue(responses[0].Prompt.contains('Today: ' + String.valueOf(today)), responses[0].Prompt);
     }
 }

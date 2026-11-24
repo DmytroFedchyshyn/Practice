@@ -44,7 +44,7 @@ A hands-on reference build in a Developer Edition org with Agentforce and Data 3
 - [x] Flow action: list the partner's return requests (`List_Return_Requests`, record collection output, Apex test; deployed and smoke-tested)
 - [ ] Confirm in the agent that a record collection works as a Flow action output; if not, switch to a text output
 - [x] Apex grounding for the prompt template: `GetReturnRequestFactsAction` with service, selector and domain rules (26 returns tests, validated, not deployed)
-- [ ] Flex prompt template `Explain_Return_Request`, built by hand in Prompt Builder, then retrieved into the repo
+- [x] Flex prompt template `Explain_Return_Request`, built by hand in Prompt Builder, previewed on three cases, activated and retrieved into the repo
 - [x] Apex tests for the service layer and wrappers (28 tests with the seed tests)
 - [x] Reorganize into feature folders with selector and domain layers (40 tests, validated)
 - [x] Deploy the Apex actions (61 components, 40 tests) and smoke-test the read-only actions on org data

@@ -70,6 +70,17 @@ private class ReturnPolicyTest {
     }
 
     @IsTest
+    static void aRejectedRequestIsClosedWithoutPromisingAnother() {
+        String step = ReturnPolicy.nextStep('Rejected');
+
+        Assert.isTrue(step.startsWith('The request is closed.'), step);
+        Assert.isFalse(
+            step.containsIgnoreCase('new request'),
+            'A rejection outside the window must not invite another request: ' + step
+        );
+    }
+
+    @IsTest
     static void limitsQuantityToWhatIsLeft() {
         Assert.isNull(ReturnPolicy.checkQuantity('00000001', 'Drill', 8, 1, 7), 'Exactly what is left');
 

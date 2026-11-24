@@ -95,3 +95,18 @@ and write with the reason in the class header; 39 Moderate, left as the baseline
 `pmd:CyclomaticComplexity`, 5 `pmd:AvoidHardcodingId` (fake Ids in tests), 4 `pmd:ExcessiveParameterList`,
 3 `pmd:NcssCount`, 1 `pmd:ProtectSensitiveData`, 1 `pmd:FieldNamingConventions`; 40 Low, all
 `pmd:ApexUnitTestClassShouldHaveRunAs` on tests that run as the test user through a helper method.
+
+## Prompt templates use Jinja merge fields now (2026-11-24)
+
+Prompt Builder refused a merge field typed by hand as `{!$Apex:GetReturnRequestFactsAction.Prompt}` ("The following
+object names were not recognized: apex.getreturnrequestfactsaction"). The template is stored with
+`templateFormat` Jinja, and a resource reads `{{Apex.GetReturnRequestFactsAction.Prompt}}`, an input
+`{{Input.requestNumber}}`. Insert a resource through *Insert Resource* rather than typing it; the older
+`{!$...}` syntax in blog posts and some help pages no longer applies.
+
+## A retrieve of a new metadata type lands in main/default inside the build folder (2026-11-24)
+
+`sf project retrieve start --metadata GenAiPromptTemplate:...` wrote the template to
+`force-app/distributor/main/default/genAiPromptTemplates/`, not `force-app/distributor/genAiPromptTemplates/`: the
+CLI adds `main/default` for a type the folder does not hold yet. Move the file up and delete the empty folders.
+
