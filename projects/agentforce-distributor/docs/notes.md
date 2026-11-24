@@ -33,6 +33,12 @@ Decisions, pitfalls, and open questions, logged as they happen. Raw material for
 | 2026-11-24 | Template inputs are free text (`requestNumber`, `accountId`), not a record | The partner types a number; the account comes from the session; Apex filters by account, so another partner's request looks missing |
 | 2026-11-24 | Grounding through an Apex class (`GetReturnRequestFactsAction`), no `CapabilityType` | The help page says `CapabilityType` is no longer needed; the class reuses the selector and the return policy and is unit-tested |
 | 2026-11-24 | Next steps per return status are invented business rules in `ReturnPolicy` | The company is fictional; keeping them in code keeps the prompt free of policy text |
+| 2026-11-24 | The owner's delivery kit is the project's base: its rules, layers, foundation, tooling and documents | One way of working across projects; the kit gained Agentforce guidance from this project |
+| 2026-11-24 | One repository, several projects: this project lives in `projects/agentforce-distributor/` | The owner keeps many projects in this repository; each stays self-contained and can move to a repository of its own |
+| 2026-11-24 | Metadata flat by type with features as globs, replacing the feature folders | The kit's layout; its tooling works on it; shared objects carry fields of several features |
+| 2026-11-24 | The kit's layers plus domain classes for rules that need no database | Keeps `ReturnPolicy`-style rules testable without data; offered to the kit as APX-43 |
+| 2026-11-24 | Prefixes `DST_` for metadata, `Dst` for shared Apex, `dst` for components | The kit's naming; renaming in a Developer Edition is cheap because the seed script rebuilds the data |
+| 2026-11-24 | Tasks in the repository's GitHub issues | The repository is on GitHub and public; the kit now supports GitHub Issues as the tracker |
 | 2026-11-24 | Deactivated the 17 Developer Edition demo products (`IsActive = false`, not deleted) | The catalogue should be the distributor's; stock search only looks at active products |
 
 ## Pitfalls

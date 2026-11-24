@@ -52,6 +52,18 @@ A hands-on reference build in a Developer Edition org with Agentforce and Data 3
 - [ ] Validate and preview locally, then publish and activate (after approval)
 - [ ] Agent tests (`AiEvaluationDefinition` / Testing Center)
 
+## Move onto the delivery kit (inside phase 2)
+
+The project adopts the owner's Salesforce delivery kit as its base. Phase 2 resumes after M5.
+
+- [x] M0: extend the kit — hook fixes, Agentforce metadata types, several projects in one repository, GitHub Issues as the tracker, Agentforce guidance and AGT rules, domain classes (kit 1.1.0, 1.1.1)
+- [x] M1: repository layout — `projects/agentforce-distributor/`, `exercises/`, root README and shared CLAUDE.md
+- [ ] M2: copy the kit into this project with `init.sh` (prefixes `DST_` / `Dst` / `dst`, GitHub, the repository's issues)
+- [ ] M3: move the metadata into the kit's layout (flat by type, features in `project.config.json`), docs into the kit's documents
+- [ ] M4: foundation in code — Dml, Parameters (the return window), Logger, Switches for agent actions, test data factory, apex-mockery and SObject Fabricator; selectors and services as instances
+- [ ] M5: prefixed metadata in the org — deploy, reseed, reassign the agent users, then remove the old metadata (each step after approval)
+- [ ] M6: resume phase 2 — prompt template, Agent Script, agent tests
+
 ## Phase 3: Data Cloud
 
 - [ ] Agree on scope (minimum versus optional parts)
