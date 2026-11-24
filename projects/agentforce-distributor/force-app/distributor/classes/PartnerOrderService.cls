@@ -97,7 +97,9 @@ public with sharing class PartnerOrderService {
                 continue;
             }
 
-            List<Id> ids = recentIdsByAccount.containsKey(lookup.accountId) ? recentIdsByAccount.get(lookup.accountId) : new List<Id>();
+            List<Id> ids = recentIdsByAccount.containsKey(lookup.accountId)
+                ? recentIdsByAccount.get(lookup.accountId)
+                : new List<Id>();
             for (Id orderId : ids) {
                 if (recentOrders.containsKey(orderId)) {
                     result.orders.add(summarize(recentOrders.get(orderId)));

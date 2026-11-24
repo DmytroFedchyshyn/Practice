@@ -1,7 +1,11 @@
 @IsTest
 private class ProductMatcherTest {
     private static final List<String> CODES = new List<String>{ 'DST-1001', 'DST-1002', 'DST-2001' };
-    private static final List<String> NAMES = new List<String>{ 'Cordless Drill 18V', 'Angle Grinder 125 mm', 'Socket Set 94 pcs' };
+    private static final List<String> NAMES = new List<String>{
+        'Cordless Drill 18V',
+        'Angle Grinder 125 mm',
+        'Socket Set 94 pcs'
+    };
 
     @IsTest
     static void exactCodeWinsOverNameMatches() {

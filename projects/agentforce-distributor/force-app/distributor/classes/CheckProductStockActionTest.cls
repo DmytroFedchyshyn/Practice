@@ -23,7 +23,10 @@ private class CheckProductStockActionTest {
 
         Assert.isTrue(responses[0].success, responses[0].message);
         Assert.isTrue(responses[0].stock.contains('285 available in total'), responses[0].stock);
-        Assert.isTrue(responses[0].stock.contains('Central Warehouse (Kyiv): 210 available of 240 on hand'), responses[0].stock);
+        Assert.isTrue(
+            responses[0].stock.contains('Central Warehouse (Kyiv): 210 available of 240 on hand'),
+            responses[0].stock
+        );
         Assert.isFalse(responses[1].success);
         Assert.areEqual('PRODUCT_NOT_FOUND', responses[1].errorCode);
         Assert.areEqual('', responses[1].stock);

@@ -26,7 +26,11 @@ public inherited sharing class OrderSelector {
         if (orderIds.isEmpty()) {
             return new List<Order>();
         }
-        return Database.queryWithBinds(FIELDS_WITH_LINES + 'WHERE Id IN :orderIds', new Map<String, Object>{ 'orderIds' => orderIds }, AccessLevel.USER_MODE);
+        return Database.queryWithBinds(
+            FIELDS_WITH_LINES + 'WHERE Id IN :orderIds',
+            new Map<String, Object>{ 'orderIds' => orderIds },
+            AccessLevel.USER_MODE
+        );
     }
 
     /** Ids of each partner's most recent orders, newest first, at most RECENT_ORDER_LIMIT per partner. */

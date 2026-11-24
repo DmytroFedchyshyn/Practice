@@ -49,7 +49,11 @@ public with sharing class ReturnPolicy {
         if (parent.Fulfillment_Status__c != FULFILLMENT_DELIVERED || parent.Delivered_Date__c == null) {
             return new Violation(
                 'NOT_DELIVERED',
-                'Order ' + orderNumber + ' is ' + parent.Fulfillment_Status__c + '. Only delivered orders can be returned.'
+                'Order ' +
+                    orderNumber +
+                    ' is ' +
+                    parent.Fulfillment_Status__c +
+                    '. Only delivered orders can be returned.'
             );
         }
         Integer daysSinceDelivery = parent.Delivered_Date__c.daysBetween(today);
@@ -85,7 +89,13 @@ public with sharing class ReturnPolicy {
      * A request may not take the total above what was ordered.
      * @return null when the quantity can be returned
      */
-    public static Violation checkQuantity(String orderNumber, String productName, Decimal ordered, Decimal alreadyRequested, Integer requested) {
+    public static Violation checkQuantity(
+        String orderNumber,
+        String productName,
+        Decimal ordered,
+        Decimal alreadyRequested,
+        Integer requested
+    ) {
         if (requested == null || requested <= 0) {
             return new Violation('INVALID_QUANTITY', 'Quantity must be a whole number greater than zero.');
         }

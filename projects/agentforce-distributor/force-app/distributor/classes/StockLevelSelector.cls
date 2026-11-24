@@ -9,7 +9,13 @@ public inherited sharing class StockLevelSelector {
             return byProduct;
         }
         for (Stock_Level__c level : [
-            SELECT Product__c, Quantity_On_Hand__c, Quantity_Available__c, Warehouse__r.Code__c, Warehouse__r.Name, Warehouse__r.City__c
+            SELECT
+                Product__c,
+                Quantity_On_Hand__c,
+                Quantity_Available__c,
+                Warehouse__r.Code__c,
+                Warehouse__r.Name,
+                Warehouse__r.City__c
             FROM Stock_Level__c
             WHERE Product__c IN :productIds AND Warehouse__r.Is_Active__c = TRUE
             WITH USER_MODE

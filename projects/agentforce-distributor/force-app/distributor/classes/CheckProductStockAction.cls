@@ -13,16 +13,28 @@ public with sharing class CheckProductStockAction {
     }
 
     public class Response {
-        @InvocableVariable(label='Success' description='True when stock was found for one or more products, including when the stock is zero.')
+        @InvocableVariable(
+            label='Success'
+            description='True when stock was found for one or more products, including when the stock is zero.'
+        )
         public Boolean success;
 
-        @InvocableVariable(label='Error Code' description='Set when Success is false: PRODUCT_NOT_FOUND, AMBIGUOUS_PRODUCT or PRODUCT_REQUIRED.')
+        @InvocableVariable(
+            label='Error Code'
+            description='Set when Success is false: PRODUCT_NOT_FOUND, AMBIGUOUS_PRODUCT or PRODUCT_REQUIRED.'
+        )
         public String errorCode;
 
-        @InvocableVariable(label='Message' description='One sentence that explains the outcome. On AMBIGUOUS_PRODUCT it lists the matching products.')
+        @InvocableVariable(
+            label='Message'
+            description='One sentence that explains the outcome. On AMBIGUOUS_PRODUCT it lists the matching products.'
+        )
         public String message;
 
-        @InvocableVariable(label='Stock' description='One line per product: total units available to order and the split per warehouse.')
+        @InvocableVariable(
+            label='Stock'
+            description='One line per product: total units available to order and the split per warehouse.'
+        )
         public String stock;
     }
 
@@ -58,10 +70,25 @@ public with sharing class CheckProductStockAction {
         List<String> warehouses = new List<String>();
         for (StockAvailabilityService.WarehouseStock warehouse : product.warehouses) {
             warehouses.add(
-                warehouse.warehouseName + ' (' + warehouse.city + '): ' + warehouse.available + ' available of ' + warehouse.onHand + ' on hand'
+                warehouse.warehouseName +
+                    ' (' +
+                    warehouse.city +
+                    '): ' +
+                    warehouse.available +
+                    ' available of ' +
+                    warehouse.onHand +
+                    ' on hand'
             );
         }
-        String summary = product.productName + ' (' + product.productCode + '): ' + product.totalAvailable + ' available in total';
-        return warehouses.isEmpty() ? summary + '. Not stocked in any active warehouse.' : summary + '. ' + String.join(warehouses, '; ') + '.';
+        String summary =
+            product.productName +
+            ' (' +
+            product.productCode +
+            '): ' +
+            product.totalAvailable +
+            ' available in total';
+        return warehouses.isEmpty()
+            ? summary + '. Not stocked in any active warehouse.'
+            : summary + '. ' + String.join(warehouses, '; ') + '.';
     }
 }

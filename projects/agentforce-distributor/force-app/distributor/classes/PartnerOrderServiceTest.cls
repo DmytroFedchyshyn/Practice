@@ -13,7 +13,9 @@ private class PartnerOrderServiceTest {
         List<PartnerOrderService.OrderResult> results;
         System.runAs(DistributorTestData.dataAdmin()) {
             results = PartnerOrderService.getOrders(
-                new List<PartnerOrderService.OrderLookup>{ new PartnerOrderService.OrderLookup(DistributorTestData.partnerId('BOR-001'), shortNumber) }
+                new List<PartnerOrderService.OrderLookup>{
+                    new PartnerOrderService.OrderLookup(DistributorTestData.partnerId('BOR-001'), shortNumber)
+                }
             );
         }
 
@@ -36,7 +38,10 @@ private class PartnerOrderServiceTest {
         System.runAs(DistributorTestData.dataAdmin()) {
             results = PartnerOrderService.getOrders(
                 new List<PartnerOrderService.OrderLookup>{
-                    new PartnerOrderService.OrderLookup(DistributorTestData.partnerId('BOR-001'), otherPartners.OrderNumber),
+                    new PartnerOrderService.OrderLookup(
+                        DistributorTestData.partnerId('BOR-001'),
+                        otherPartners.OrderNumber
+                    ),
                     new PartnerOrderService.OrderLookup(DistributorTestData.partnerId('BOR-001'), '99999999')
                 }
             );
@@ -57,7 +62,9 @@ private class PartnerOrderServiceTest {
         List<PartnerOrderService.OrderResult> results;
         System.runAs(DistributorTestData.dataAdmin()) {
             results = PartnerOrderService.getOrders(
-                new List<PartnerOrderService.OrderLookup>{ new PartnerOrderService.OrderLookup(DistributorTestData.partnerId('MAR-003'), '  ') }
+                new List<PartnerOrderService.OrderLookup>{
+                    new PartnerOrderService.OrderLookup(DistributorTestData.partnerId('MAR-003'), '  ')
+                }
             );
         }
 
@@ -73,7 +80,9 @@ private class PartnerOrderServiceTest {
     static void missingAccountIsAnError() {
         List<PartnerOrderService.OrderResult> results;
         System.runAs(DistributorTestData.dataAdmin()) {
-            results = PartnerOrderService.getOrders(new List<PartnerOrderService.OrderLookup>{ new PartnerOrderService.OrderLookup(null, '103') });
+            results = PartnerOrderService.getOrders(
+                new List<PartnerOrderService.OrderLookup>{ new PartnerOrderService.OrderLookup(null, '103') }
+            );
         }
 
         Assert.isFalse(results[0].success);

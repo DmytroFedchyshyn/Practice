@@ -5,11 +5,21 @@ private class ReturnRequestServiceTest {
         DistributorTestData.setUp();
     }
 
-    private static ReturnRequestService.ReturnInput input(String partnerCode, String orderNumber, String product, Integer quantity) {
+    private static ReturnRequestService.ReturnInput input(
+        String partnerCode,
+        String orderNumber,
+        String product,
+        Integer quantity
+    ) {
         return inputFor(DistributorTestData.partnerId(partnerCode), orderNumber, product, quantity);
     }
 
-    private static ReturnRequestService.ReturnInput inputFor(Id accountId, String orderNumber, String product, Integer quantity) {
+    private static ReturnRequestService.ReturnInput inputFor(
+        Id accountId,
+        String orderNumber,
+        String product,
+        Integer quantity
+    ) {
         ReturnRequestService.ReturnInput input = new ReturnRequestService.ReturnInput();
         input.accountId = accountId;
         input.orderNumber = orderNumber;
@@ -63,7 +73,11 @@ private class ReturnRequestServiceTest {
         Assert.areEqual(parent.Id, saved.Order__c);
         Assert.areEqual(line.Product2Id, saved.Product__c);
         Assert.areEqual(request.contactId, saved.Requested_By__c);
-        Assert.areEqual('Damaged in Transit', saved.Reason__c, 'Reason is matched ignoring case and stored as the picklist value');
+        Assert.areEqual(
+            'Damaged in Transit',
+            saved.Reason__c,
+            'Reason is matched ignoring case and stored as the picklist value'
+        );
     }
 
     @IsTest
@@ -77,7 +91,10 @@ private class ReturnRequestServiceTest {
         )[0];
 
         Assert.isTrue(result.success, result.message);
-        Assert.areEqual(line.Product2Id, [SELECT Product__c FROM Return_Request__c WHERE Id = :result.recordId].Product__c);
+        Assert.areEqual(
+            line.Product2Id,
+            [SELECT Product__c FROM Return_Request__c WHERE Id = :result.recordId].Product__c
+        );
     }
 
     @IsTest
@@ -135,7 +152,12 @@ private class ReturnRequestServiceTest {
     @IsTest
     static void openRequestsAndRequestsInTheSameCallCountAgainstTheOrderedQuantity() {
         Order parent = DistributorTestData.recentDeliveredOrder('BOR-001');
-        Return_Request__c seeded = [SELECT Product__c, Quantity__c FROM Return_Request__c WHERE Order__c = :parent.Id LIMIT 1];
+        Return_Request__c seeded = [
+            SELECT Product__c, Quantity__c
+            FROM Return_Request__c
+            WHERE Order__c = :parent.Id
+            LIMIT 1
+        ];
         Decimal ordered = 0;
         String productCode;
         for (OrderItem item : parent.OrderItems) {
@@ -154,13 +176,22 @@ private class ReturnRequestServiceTest {
         );
 
         Assert.isTrue(results[0].success, results[0].message);
-        Assert.areEqual('QUANTITY_EXCEEDS_ORDER', results[1].errorCode, 'The first request in the call used up the rest');
+        Assert.areEqual(
+            'QUANTITY_EXCEEDS_ORDER',
+            results[1].errorCode,
+            'The first request in the call used up the rest'
+        );
     }
 
     @IsTest
     static void rejectedRequestsDoNotCount() {
         Order parent = DistributorTestData.recentDeliveredOrder('BOR-001');
-        Return_Request__c seeded = [SELECT Id, Product__c, Quantity__c FROM Return_Request__c WHERE Order__c = :parent.Id LIMIT 1];
+        Return_Request__c seeded = [
+            SELECT Id, Product__c, Quantity__c
+            FROM Return_Request__c
+            WHERE Order__c = :parent.Id
+            LIMIT 1
+        ];
         update new Return_Request__c(Id = seeded.Id, Status__c = 'Rejected');
         Decimal ordered = 0;
         String productCode;
@@ -172,7 +203,9 @@ private class ReturnRequestServiceTest {
         }
 
         ReturnRequestService.ReturnResult result = create(
-            new List<ReturnRequestService.ReturnInput>{ input('BOR-001', parent.OrderNumber, productCode, ordered.intValue()) }
+            new List<ReturnRequestService.ReturnInput>{
+                input('BOR-001', parent.OrderNumber, productCode, ordered.intValue())
+            }
         )[0];
 
         Assert.isTrue(result.success, result.message);

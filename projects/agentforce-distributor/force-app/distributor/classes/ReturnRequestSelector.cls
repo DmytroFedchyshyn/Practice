@@ -27,7 +27,9 @@ public inherited sharing class ReturnRequestSelector {
         if (requestIds.isEmpty()) {
             return new Map<Id, Return_Request__c>();
         }
-        return new Map<Id, Return_Request__c>([SELECT Id, Name, Status__c FROM Return_Request__c WHERE Id IN :requestIds WITH USER_MODE]);
+        return new Map<Id, Return_Request__c>(
+            [SELECT Id, Name, Status__c FROM Return_Request__c WHERE Id IN :requestIds WITH USER_MODE]
+        );
     }
 
     /** Requests with everything needed to explain them to a partner, including the order's delivery date. */

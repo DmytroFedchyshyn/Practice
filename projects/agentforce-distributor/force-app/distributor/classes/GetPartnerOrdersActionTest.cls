@@ -23,7 +23,9 @@ private class GetPartnerOrdersActionTest {
 
         List<GetPartnerOrdersAction.Response> responses;
         System.runAs(DistributorTestData.dataAdmin()) {
-            responses = GetPartnerOrdersAction.run(new List<GetPartnerOrdersAction.Request>{ byNumber, recent, missing });
+            responses = GetPartnerOrdersAction.run(
+                new List<GetPartnerOrdersAction.Request>{ byNumber, recent, missing }
+            );
         }
 
         Assert.isTrue(responses[0].success, responses[0].message);

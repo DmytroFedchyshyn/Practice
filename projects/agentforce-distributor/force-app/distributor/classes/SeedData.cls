@@ -66,8 +66,20 @@ public with sharing class SeedData {
     // Partner code, index into ORDER_SHAPES, reason, status, resolution notes
     private static final List<List<Object>> RETURN_ROWS = new List<List<Object>>{
         new List<Object>{ 'BOR-001', 3, 'Damaged in Transit', 'Under Review', null },
-        new List<Object>{ 'KES-002', 3, 'Wrong Item', 'Approved', 'Approved. A prepaid return label was sent to the requester.' },
-        new List<Object>{ 'MAR-003', 4, 'Defective', 'Rejected', 'Rejected: the order was delivered outside the 30-day return window.' }
+        new List<Object>{
+            'KES-002',
+            3,
+            'Wrong Item',
+            'Approved',
+            'Approved. A prepaid return label was sent to the requester.'
+        },
+        new List<Object>{
+            'MAR-003',
+            4,
+            'Defective',
+            'Rejected',
+            'Rejected: the order was delivered outside the 30-day return window.'
+        }
     };
 
     /**
@@ -105,7 +117,9 @@ public with sharing class SeedData {
     private static Map<String, Account> upsertAccounts() {
         List<Account> records = new List<Account>();
         for (List<String> row : PARTNER_ROWS) {
-            records.add(new Account(Partner_Code__c = row[0], Name = row[1], Partner_Tier__c = row[2], BillingCity = row[3]));
+            records.add(
+                new Account(Partner_Code__c = row[0], Name = row[1], Partner_Tier__c = row[2], BillingCity = row[3])
+            );
         }
         upsert records Partner_Code__c;
 
@@ -145,7 +159,11 @@ public with sharing class SeedData {
 
     private static Map<String, Product2> upsertProducts() {
         Map<String, Product2> byCode = new Map<String, Product2>();
-        for (Product2 record : [SELECT Id, ProductCode FROM Product2 WHERE ProductCode LIKE :(PRODUCT_CODE_PREFIX + '%')]) {
+        for (Product2 record : [
+            SELECT Id, ProductCode
+            FROM Product2
+            WHERE ProductCode LIKE :(PRODUCT_CODE_PREFIX + '%')
+        ]) {
             byCode.put(record.ProductCode, record);
         }
         for (List<Object> row : PRODUCT_ROWS) {
@@ -165,7 +183,12 @@ public with sharing class SeedData {
      * activating or editing the org's standard price book.
      */
     private static Id upsertPriceBook() {
-        List<Pricebook2> existing = [SELECT Id FROM Pricebook2 WHERE Name = :PRICE_BOOK_NAME AND IsStandard = FALSE LIMIT 1];
+        List<Pricebook2> existing = [
+            SELECT Id
+            FROM Pricebook2
+            WHERE Name = :PRICE_BOOK_NAME AND IsStandard = FALSE
+            LIMIT 1
+        ];
         Pricebook2 record = existing.isEmpty() ? new Pricebook2(Name = PRICE_BOOK_NAME) : existing[0];
         record.IsActive = true;
         record.Description = 'Partner prices for the distributor demo data.';
@@ -235,7 +258,10 @@ public with sharing class SeedData {
         return byCode;
     }
 
-    private static List<Stock_Level__c> upsertStockLevels(Map<String, Product2> products, Map<String, Warehouse__c> warehouses) {
+    private static List<Stock_Level__c> upsertStockLevels(
+        Map<String, Product2> products,
+        Map<String, Warehouse__c> warehouses
+    ) {
         Map<String, Stock_Level__c> existing = new Map<String, Stock_Level__c>();
         for (Stock_Level__c record : [
             SELECT Id, Stock_Key__c
@@ -315,7 +341,10 @@ public with sharing class SeedData {
                         EffectiveDate = today.addDays(-(Integer) shape[0]),
                         Status = 'Draft',
                         Fulfillment_Status__c = fulfillment,
-                        Fulfillment_Warehouse__c = warehouses.get(WAREHOUSE_ROWS[Math.mod(p + s, WAREHOUSE_ROWS.size())][0]).Id,
+                        Fulfillment_Warehouse__c = warehouses.get(
+                                WAREHOUSE_ROWS[Math.mod(p + s, WAREHOUSE_ROWS.size())][0]
+                            )
+                            .Id,
                         Expected_Delivery_Date__c = expectedIn == null ? null : today.addDays(expectedIn),
                         Delivered_Date__c = deliveredAgo == null ? null : today.addDays(-deliveredAgo),
                         Tracking_Number__c = hasShipped ? 'TRK-' + partnerCode + '-' + (s + 1) : null
@@ -371,7 +400,12 @@ public with sharing class SeedData {
         for (List<Object> row : RETURN_ROWS) {
             orderIds.add(orders.get((String) row[0])[(Integer) row[1]].Id);
         }
-        for (OrderItem item : [SELECT OrderId, Product2Id FROM OrderItem WHERE OrderId IN :orderIds ORDER BY OrderItemNumber DESC]) {
+        for (OrderItem item : [
+            SELECT OrderId, Product2Id
+            FROM OrderItem
+            WHERE OrderId IN :orderIds
+            ORDER BY OrderItemNumber DESC
+        ]) {
             firstProductByOrder.put(item.OrderId, item.Product2Id);
         }
 

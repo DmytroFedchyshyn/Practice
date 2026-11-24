@@ -12,12 +12,19 @@ private class ReturnPolicyTest {
     @IsTest
     static void acceptsDeliveredOrdersInsideTheWindow() {
         Assert.isNull(ReturnPolicy.checkOrder(deliveredDaysAgo(0), '00000001', TODAY));
-        Assert.isNull(ReturnPolicy.checkOrder(deliveredDaysAgo(ReturnPolicy.RETURN_WINDOW_DAYS), '00000001', TODAY), 'The last day still counts');
+        Assert.isNull(
+            ReturnPolicy.checkOrder(deliveredDaysAgo(ReturnPolicy.RETURN_WINDOW_DAYS), '00000001', TODAY),
+            'The last day still counts'
+        );
     }
 
     @IsTest
     static void rejectsOrdersOutsideTheWindow() {
-        ReturnPolicy.Violation violation = ReturnPolicy.checkOrder(deliveredDaysAgo(ReturnPolicy.RETURN_WINDOW_DAYS + 1), '00000001', TODAY);
+        ReturnPolicy.Violation violation = ReturnPolicy.checkOrder(
+            deliveredDaysAgo(ReturnPolicy.RETURN_WINDOW_DAYS + 1),
+            '00000001',
+            TODAY
+        );
 
         Assert.areEqual('RETURN_WINDOW_CLOSED', violation.code);
         Assert.isTrue(violation.message.contains('31 days ago'), violation.message);
@@ -25,7 +32,10 @@ private class ReturnPolicyTest {
 
     @IsTest
     static void rejectsOrdersThatAreNotDelivered() {
-        Assert.areEqual('NOT_DELIVERED', ReturnPolicy.checkOrder(new Order(Fulfillment_Status__c = 'Shipped'), '00000001', TODAY).code);
+        Assert.areEqual(
+            'NOT_DELIVERED',
+            ReturnPolicy.checkOrder(new Order(Fulfillment_Status__c = 'Shipped'), '00000001', TODAY).code
+        );
         Assert.areEqual(
             'NOT_DELIVERED',
             ReturnPolicy.checkOrder(new Order(Fulfillment_Status__c = 'Delivered'), '00000001', TODAY).code,
@@ -50,7 +60,11 @@ private class ReturnPolicyTest {
     @IsTest
     static void everyStatusHasANextStep() {
         for (Schema.PicklistEntry status : Return_Request__c.Status__c.getDescribe().getPicklistValues()) {
-            Assert.areNotEqual(ReturnPolicy.nextStep('unknown'), ReturnPolicy.nextStep(status.getValue()), 'Missing next step for ' + status.getValue());
+            Assert.areNotEqual(
+                ReturnPolicy.nextStep('unknown'),
+                ReturnPolicy.nextStep(status.getValue()),
+                'Missing next step for ' + status.getValue()
+            );
         }
         Assert.isTrue(ReturnPolicy.nextStep(null).startsWith('Contact the returns team'));
     }

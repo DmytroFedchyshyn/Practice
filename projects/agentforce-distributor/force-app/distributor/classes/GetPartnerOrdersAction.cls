@@ -4,7 +4,11 @@
  */
 public with sharing class GetPartnerOrdersAction {
     public class Request {
-        @InvocableVariable(label='Partner Account ID' description='ID of the partner account whose orders to read.' required=true)
+        @InvocableVariable(
+            label='Partner Account ID'
+            description='ID of the partner account whose orders to read.'
+            required=true
+        )
         public Id accountId;
 
         @InvocableVariable(
@@ -15,13 +19,22 @@ public with sharing class GetPartnerOrdersAction {
     }
 
     public class Response {
-        @InvocableVariable(label='Success' description='True when the lookup worked, including when the partner has no orders.')
+        @InvocableVariable(
+            label='Success'
+            description='True when the lookup worked, including when the partner has no orders.'
+        )
         public Boolean success;
 
-        @InvocableVariable(label='Error Code' description='Set when Success is false, for example ORDER_NOT_FOUND or MISSING_ACCOUNT.')
+        @InvocableVariable(
+            label='Error Code'
+            description='Set when Success is false, for example ORDER_NOT_FOUND or MISSING_ACCOUNT.'
+        )
         public String errorCode;
 
-        @InvocableVariable(label='Message' description='One sentence that explains the outcome. Pass it on when Success is false.')
+        @InvocableVariable(
+            label='Message'
+            description='One sentence that explains the outcome. Pass it on when Success is false.'
+        )
         public String message;
 
         @InvocableVariable(

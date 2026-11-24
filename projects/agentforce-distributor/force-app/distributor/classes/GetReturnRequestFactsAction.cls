@@ -5,7 +5,10 @@
  */
 public with sharing class GetReturnRequestFactsAction {
     public class Request {
-        @InvocableVariable(label='Return Request Number' description='Number the partner gave, for example RR-00012 or 12.')
+        @InvocableVariable(
+            label='Return Request Number'
+            description='Number the partner gave, for example RR-00012 or 12.'
+        )
         public String requestNumber;
 
         @InvocableVariable(label='Partner Account ID' description='ID of the partner account from the agent session.')
@@ -13,7 +16,10 @@ public with sharing class GetReturnRequestFactsAction {
     }
 
     public class Response {
-        @InvocableVariable(label='Prompt' description='Facts about the return request and the return policy, as plain text.')
+        @InvocableVariable(
+            label='Prompt'
+            description='Facts about the return request and the return policy, as plain text.'
+        )
         public String Prompt;
     }
 

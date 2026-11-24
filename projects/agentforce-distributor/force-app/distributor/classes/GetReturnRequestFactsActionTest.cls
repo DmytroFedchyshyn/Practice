@@ -7,7 +7,12 @@ private class GetReturnRequestFactsActionTest {
 
     @IsTest
     static void mapsInputsToThePromptText() {
-        Return_Request__c request = [SELECT Name, Account__c FROM Return_Request__c WHERE Account__r.Partner_Code__c = 'MAR-003' LIMIT 1];
+        Return_Request__c request = [
+            SELECT Name, Account__c
+            FROM Return_Request__c
+            WHERE Account__r.Partner_Code__c = 'MAR-003'
+            LIMIT 1
+        ];
         GetReturnRequestFactsAction.Request input = new GetReturnRequestFactsAction.Request();
         input.requestNumber = request.Name;
         input.accountId = request.Account__c;

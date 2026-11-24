@@ -4,19 +4,38 @@
  */
 public with sharing class CreateReturnRequestAction {
     public class Request {
-        @InvocableVariable(label='Partner Account ID' description='ID of the partner account that returns the product.' required=true)
+        @InvocableVariable(
+            label='Partner Account ID'
+            description='ID of the partner account that returns the product.'
+            required=true
+        )
         public Id accountId;
 
-        @InvocableVariable(label='Requester Contact ID' description='Optional. ID of the partner contact who asks for the return.')
+        @InvocableVariable(
+            label='Requester Contact ID'
+            description='Optional. ID of the partner contact who asks for the return.'
+        )
         public Id contactId;
 
-        @InvocableVariable(label='Order Number' description='Number of the delivered order, for example 00000103 or 103.' required=true)
+        @InvocableVariable(
+            label='Order Number'
+            description='Number of the delivered order, for example 00000103 or 103.'
+            required=true
+        )
         public String orderNumber;
 
-        @InvocableVariable(label='Product' description='Product code or part of the product name, as it appears on the order.' required=true)
+        @InvocableVariable(
+            label='Product'
+            description='Product code or part of the product name, as it appears on the order.'
+            required=true
+        )
         public String product;
 
-        @InvocableVariable(label='Quantity' description='Number of units to return. Whole number greater than zero.' required=true)
+        @InvocableVariable(
+            label='Quantity'
+            description='Number of units to return. Whole number greater than zero.'
+            required=true
+        )
         public Integer quantity;
 
         @InvocableVariable(
@@ -40,10 +59,16 @@ public with sharing class CreateReturnRequestAction {
         )
         public String errorCode;
 
-        @InvocableVariable(label='Message' description='One sentence that explains the outcome. Pass it on to the partner.')
+        @InvocableVariable(
+            label='Message'
+            description='One sentence that explains the outcome. Pass it on to the partner.'
+        )
         public String message;
 
-        @InvocableVariable(label='Return Request Number' description='Number of the new return request, for example RR-00012.')
+        @InvocableVariable(
+            label='Return Request Number'
+            description='Number of the new return request, for example RR-00012.'
+        )
         public String requestNumber;
 
         @InvocableVariable(label='Return Request ID' description='Record ID of the new return request.')

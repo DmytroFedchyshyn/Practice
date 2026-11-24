@@ -21,7 +21,11 @@ private class SeedDataTest {
         SeedData.run();
 
         Map<String, Integer> byStatus = new Map<String, Integer>();
-        for (AggregateResult row : [SELECT Fulfillment_Status__c status, COUNT(Id) total FROM Order GROUP BY Fulfillment_Status__c]) {
+        for (AggregateResult row : [
+            SELECT Fulfillment_Status__c status, COUNT(Id) total
+            FROM Order
+            GROUP BY Fulfillment_Status__c
+        ]) {
             byStatus.put((String) row.get('status'), (Integer) row.get('total'));
         }
         Assert.areEqual(3, byStatus.get('Processing'));
@@ -30,10 +34,18 @@ private class SeedDataTest {
         Assert.areEqual(6, byStatus.get('Delivered'));
         Assert.areEqual(3, byStatus.get('Cancelled'));
 
-        Assert.areEqual(15, [SELECT COUNT() FROM Order WHERE Status = 'Activated'], 'Everything but cancelled orders is activated');
+        Assert.areEqual(
+            15,
+            [SELECT COUNT() FROM Order WHERE Status = 'Activated'],
+            'Everything but cancelled orders is activated'
+        );
         Assert.areEqual(
             0,
-            [SELECT COUNT() FROM Order WHERE Fulfillment_Status__c = 'Delivered' AND (Delivered_Date__c = NULL OR Tracking_Number__c = NULL)],
+            [
+                SELECT COUNT()
+                FROM Order
+                WHERE Fulfillment_Status__c = 'Delivered' AND (Delivered_Date__c = NULL OR Tracking_Number__c = NULL)
+            ],
             'Delivered orders carry a delivery date and a tracking number'
         );
     }
@@ -42,19 +54,29 @@ private class SeedDataTest {
     static void stockMixIncludesOutOfStockAndFullyReserved() {
         SeedData.run();
 
-        Assert.isTrue([SELECT COUNT() FROM Stock_Level__c WHERE Quantity_On_Hand__c = 0] > 0, 'Some products are out of stock');
+        Assert.isTrue(
+            [SELECT COUNT() FROM Stock_Level__c WHERE Quantity_On_Hand__c = 0] > 0,
+            'Some products are out of stock'
+        );
         Assert.isTrue(
             [SELECT COUNT() FROM Stock_Level__c WHERE Quantity_On_Hand__c > 0 AND Quantity_Available__c = 0] > 0,
             'Some stock is fully reserved'
         );
-        Assert.areEqual(0, [SELECT COUNT() FROM Stock_Level__c WHERE Quantity_Available__c < 0], 'Never more reserved than on hand');
+        Assert.areEqual(
+            0,
+            [SELECT COUNT() FROM Stock_Level__c WHERE Quantity_Available__c < 0],
+            'Never more reserved than on hand'
+        );
     }
 
     @IsTest
     static void returnRequestsBelongToTheOrderAccount() {
         SeedData.run();
 
-        for (Return_Request__c request : [SELECT Account__c, Order__r.AccountId, Product__c, Requested_By__r.AccountId FROM Return_Request__c]) {
+        for (Return_Request__c request : [
+            SELECT Account__c, Order__r.AccountId, Product__c, Requested_By__r.AccountId
+            FROM Return_Request__c
+        ]) {
             Assert.areEqual(request.Order__r.AccountId, request.Account__c, 'Request and order share the partner');
             Assert.areEqual(request.Account__c, request.Requested_By__r.AccountId, 'Requester works for the partner');
             Assert.isNotNull(request.Product__c);
@@ -70,7 +92,11 @@ private class SeedDataTest {
         SeedData.run();
         Test.stopTest();
 
-        Assert.areEqual(3, [SELECT COUNT() FROM Account WHERE Partner_Code__c != NULL], 'Accounts are updated, not duplicated');
+        Assert.areEqual(
+            3,
+            [SELECT COUNT() FROM Account WHERE Partner_Code__c != NULL],
+            'Accounts are updated, not duplicated'
+        );
         Assert.areEqual(6, [SELECT COUNT() FROM Contact WHERE Account.Partner_Code__c != NULL]);
         Assert.areEqual(8, [SELECT COUNT() FROM Product2 WHERE ProductCode LIKE :(SeedData.PRODUCT_CODE_PREFIX + '%')]);
         Assert.areEqual(1, [SELECT COUNT() FROM Pricebook2 WHERE Name = :SeedData.PRICE_BOOK_NAME]);

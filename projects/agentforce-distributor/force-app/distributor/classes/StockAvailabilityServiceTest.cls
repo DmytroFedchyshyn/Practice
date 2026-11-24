@@ -50,13 +50,18 @@ private class StockAvailabilityServiceTest {
         Assert.areEqual('AMBIGUOUS_PRODUCT', result.errorCode);
         Assert.isTrue(result.message.contains('DST-1001'), 'The message lists the matches');
         Assert.isTrue(result.message.contains('matches 7 products'), result.message);
-        Assert.isTrue(result.message.endsWith(' and 2 more.'), 'Only the first ' + StockAvailabilityService.MAX_MATCHES + ' are listed: ' + result.message);
+        Assert.isTrue(
+            result.message.endsWith(' and 2 more.'),
+            'Only the first ' + StockAvailabilityService.MAX_MATCHES + ' are listed: ' + result.message
+        );
         Assert.isTrue(result.products.isEmpty());
     }
 
     @IsTest
     static void unknownAndBlankProductsAreErrors() {
-        List<StockAvailabilityService.StockResult> results = check(new List<String>{ 'flux capacitor', ' ', null, '100%' });
+        List<StockAvailabilityService.StockResult> results = check(
+            new List<String>{ 'flux capacitor', ' ', null, '100%' }
+        );
 
         Assert.areEqual('PRODUCT_NOT_FOUND', results[0].errorCode);
         Assert.areEqual('PRODUCT_REQUIRED', results[1].errorCode);

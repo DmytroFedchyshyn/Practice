@@ -38,7 +38,14 @@ public class DistributorTestData {
 
     public static Order orderWithStatus(String partnerCode, String fulfillmentStatus) {
         return [
-            SELECT Id, OrderNumber, (SELECT Product2Id, Product2.ProductCode, Product2.Name, Quantity FROM OrderItems ORDER BY OrderItemNumber)
+            SELECT
+                Id,
+                OrderNumber,
+                (
+                    SELECT Product2Id, Product2.ProductCode, Product2.Name, Quantity
+                    FROM OrderItems
+                    ORDER BY OrderItemNumber
+                )
             FROM Order
             WHERE Account.Partner_Code__c = :partnerCode AND Fulfillment_Status__c = :fulfillmentStatus
             LIMIT 1
@@ -51,7 +58,11 @@ public class DistributorTestData {
                 Id,
                 OrderNumber,
                 Delivered_Date__c,
-                (SELECT Product2Id, Product2.ProductCode, Product2.Name, Quantity FROM OrderItems ORDER BY OrderItemNumber)
+                (
+                    SELECT Product2Id, Product2.ProductCode, Product2.Name, Quantity
+                    FROM OrderItems
+                    ORDER BY OrderItemNumber
+                )
             FROM Order
             WHERE Account.Partner_Code__c = :partnerCode AND Fulfillment_Status__c = 'Delivered'
             ORDER BY Delivered_Date__c DESC

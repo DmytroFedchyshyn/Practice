@@ -36,7 +36,9 @@ private class ReturnRequestFactsServiceTest {
     static void describesARequestOfThePartner() {
         Return_Request__c request = kestrelRequest();
 
-        String facts = describe(new List<ReturnRequestFactsService.FactsInput>{ input(request.Name, request.Account__c) })[0];
+        String facts = describe(
+            new List<ReturnRequestFactsService.FactsInput>{ input(request.Name, request.Account__c) }
+        )[0];
 
         Assert.isTrue(facts.contains('Return request: ' + request.Name), facts);
         Assert.isTrue(facts.contains('Status: Approved'), facts);
@@ -68,7 +70,11 @@ private class ReturnRequestFactsServiceTest {
             new List<ReturnRequestFactsService.FactsInput>{ input(request.Name, borealis), input('RR-99999', borealis) }
         );
 
-        Assert.areEqual(facts[1].replace('RR-99999', request.Name), facts[0], 'Same answer as for a number that does not exist');
+        Assert.areEqual(
+            facts[1].replace('RR-99999', request.Name),
+            facts[0],
+            'Same answer as for a number that does not exist'
+        );
         Assert.isTrue(facts[0].startsWith('No return request ' + request.Name + ' was found'), facts[0]);
     }
 

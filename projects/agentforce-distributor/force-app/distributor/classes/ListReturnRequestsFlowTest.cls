@@ -47,11 +47,23 @@ private class ListReturnRequestsFlowTest {
 
         List<Return_Request__c> requests = run(borealis, null);
 
-        Return_Request__c expected = [SELECT Id, Order__r.OrderNumber, Product__r.Name FROM Return_Request__c WHERE Account__c = :borealis];
+        Return_Request__c expected = [
+            SELECT Id, Order__r.OrderNumber, Product__r.Name
+            FROM Return_Request__c
+            WHERE Account__c = :borealis
+        ];
         Assert.areEqual(1, requests.size());
         Assert.areEqual(expected.Id, requests[0].Id);
-        Assert.areEqual(expected.Order__r.OrderNumber, requests[0].Order_Number__c, 'Order number comes from the formula field');
-        Assert.areEqual(expected.Product__r.Name, requests[0].Product_Name__c, 'Product name comes from the formula field');
+        Assert.areEqual(
+            expected.Order__r.OrderNumber,
+            requests[0].Order_Number__c,
+            'Order number comes from the formula field'
+        );
+        Assert.areEqual(
+            expected.Product__r.Name,
+            requests[0].Product_Name__c,
+            'Product name comes from the formula field'
+        );
         Assert.isTrue(requests[0].Name.startsWith('RR-'), requests[0].Name);
     }
 
@@ -62,11 +74,20 @@ private class ListReturnRequestsFlowTest {
 
         List<Return_Request__c> requests = run(borealis, '');
 
-        Return_Request__c newest = [SELECT Id FROM Return_Request__c WHERE Account__c = :borealis ORDER BY Name DESC LIMIT 1];
+        Return_Request__c newest = [
+            SELECT Id
+            FROM Return_Request__c
+            WHERE Account__c = :borealis
+            ORDER BY Name DESC
+            LIMIT 1
+        ];
         Assert.areEqual(10, requests.size());
         Assert.areEqual(newest.Id, requests[0].Id);
         for (Integer i = 1; i < requests.size(); i++) {
-            Assert.isTrue(requests[i - 1].Name > requests[i].Name, 'Newest first: ' + requests[i - 1].Name + ' before ' + requests[i].Name);
+            Assert.isTrue(
+                requests[i - 1].Name > requests[i].Name,
+                'Newest first: ' + requests[i - 1].Name + ' before ' + requests[i].Name
+            );
         }
     }
 

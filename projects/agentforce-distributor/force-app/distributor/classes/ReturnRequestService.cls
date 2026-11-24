@@ -75,14 +75,20 @@ public with sharing class ReturnRequestService {
             results.add(result);
 
             if (input.accountId == null) {
-                fail(result, 'MISSING_ACCOUNT', 'The partner account is not known, so a return request cannot be created.');
+                fail(
+                    result,
+                    'MISSING_ACCOUNT',
+                    'The partner account is not known, so a return request cannot be created.'
+                );
                 continue;
             }
             if (input.quantity == null || input.quantity <= 0) {
                 fail(result, 'INVALID_QUANTITY', 'Quantity must be a whole number greater than zero.');
                 continue;
             }
-            String reason = String.isBlank(input.reason) ? null : reasonByLowerCase.get(input.reason.trim().toLowerCase());
+            String reason = String.isBlank(input.reason)
+                ? null
+                : reasonByLowerCase.get(input.reason.trim().toLowerCase());
             if (reason == null) {
                 fail(result, 'INVALID_REASON', 'Reason must be one of: ' + String.join(reasonLabels, ', ') + '.');
                 continue;
@@ -106,7 +112,10 @@ public with sharing class ReturnRequestService {
                 fail(result, orderViolation.code, orderViolation.message);
                 continue;
             }
-            if (input.contactId != null && (!contacts.containsKey(input.contactId) || contacts.get(input.contactId).AccountId != input.accountId)) {
+            if (
+                input.contactId != null &&
+                (!contacts.containsKey(input.contactId) || contacts.get(input.contactId).AccountId != input.accountId)
+            ) {
                 fail(result, 'INVALID_CONTACT', 'The requester is not a contact of this partner.');
                 continue;
             }
@@ -120,7 +129,13 @@ public with sharing class ReturnRequestService {
                 fail(
                     result,
                     'PRODUCT_NOT_ON_ORDER',
-                    'Order ' + orderNumber + ' has no product matching "' + input.product.trim() + '". Products on this order: ' + productNames(parent.OrderItems) + '.'
+                    'Order ' +
+                        orderNumber +
+                        ' has no product matching "' +
+                        input.product.trim() +
+                        '". Products on this order: ' +
+                        productNames(parent.OrderItems) +
+                        '.'
                 );
                 continue;
             }
@@ -128,7 +143,13 @@ public with sharing class ReturnRequestService {
                 fail(
                     result,
                     'AMBIGUOUS_PRODUCT',
-                    'More than one product on order ' + orderNumber + ' matches "' + input.product.trim() + '": ' + productNames(matches) + '. Ask which one.'
+                    'More than one product on order ' +
+                        orderNumber +
+                        ' matches "' +
+                        input.product.trim() +
+                        '": ' +
+                        productNames(matches) +
+                        '. Ask which one.'
                 );
                 continue;
             }
@@ -186,7 +207,11 @@ public with sharing class ReturnRequestService {
         for (Integer i = 0; i < saves.size(); i++) {
             ReturnResult result = pending[i];
             if (!saves[i].isSuccess()) {
-                fail(result, 'SAVE_FAILED', 'The return request could not be saved: ' + saves[i].getErrors()[0].getMessage());
+                fail(
+                    result,
+                    'SAVE_FAILED',
+                    'The return request could not be saved: ' + saves[i].getErrors()[0].getMessage()
+                );
                 continue;
             }
             Return_Request__c record = saved.get(saves[i].getId());
@@ -194,7 +219,14 @@ public with sharing class ReturnRequestService {
             result.recordId = saves[i].getId();
             result.requestNumber = record?.Name;
             result.status = record == null ? ReturnPolicy.STATUS_SUBMITTED : record.Status__c;
-            result.message = 'Return request ' + result.requestNumber + ' was submitted for ' + summaries[i] + '. Status: ' + result.status + '.';
+            result.message =
+                'Return request ' +
+                result.requestNumber +
+                ' was submitted for ' +
+                summaries[i] +
+                '. Status: ' +
+                result.status +
+                '.';
         }
     }
 

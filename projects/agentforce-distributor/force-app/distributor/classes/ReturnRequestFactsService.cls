@@ -57,10 +57,15 @@ public with sharing class ReturnRequestFactsService {
         List<String> lines = new List<String>{
             'Return request: ' + request.Name,
             'Status: ' + request.Status__c,
-            'Product: ' + request.Product_Name__c + ', quantity ' + request.Quantity__c.intValue(),
+            'Product: ' +
+            request.Product_Name__c +
+            ', quantity ' +
+            request.Quantity__c.intValue(),
             'Order: ' + request.Order_Number__c,
             'Order delivered on: ' + (deliveredOn == null ? 'not delivered' : String.valueOf(deliveredOn)),
-            'Request made on: ' + String.valueOf(requestedOn) + daysAfterDelivery(deliveredOn, requestedOn),
+            'Request made on: ' +
+            String.valueOf(requestedOn) +
+            daysAfterDelivery(deliveredOn, requestedOn),
             'Reason: ' + request.Reason__c,
             'Partner description: ' + valueOrNone(request.Description__c),
             'Resolution notes from the returns team: ' + valueOrNone(request.Resolution_Notes__c),
