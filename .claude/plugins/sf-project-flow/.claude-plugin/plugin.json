@@ -1,0 +1,14 @@
+{
+  "name": "sf-project-flow",
+  "version": "1.0.0",
+  "description": "The delivery flow of this Salesforce project inside Claude: plan, build and review a change against the project's review rules, write project documentation, and research platform questions. Scoped to this repository.",
+  "author": {
+    "name": "Project team"
+  },
+  "keywords": [
+    "salesforce",
+    "code-review",
+    "documentation",
+    "discovery"
+  ]
+}

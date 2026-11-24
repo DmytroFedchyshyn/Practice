@@ -1,0 +1,14 @@
+{
+  "name": "project-plugins",
+  "owner": {
+    "name": "Project team"
+  },
+  "description": "Project-local marketplace for this repository.",
+  "plugins": [
+    {
+      "name": "sf-project-flow",
+      "source": "./sf-project-flow",
+      "description": "The delivery flow of this Salesforce project inside Claude: plan, build and review a change against the project's review rules, write project documentation, and research platform questions. Scoped to this repository."
+    }
+  ]
+}

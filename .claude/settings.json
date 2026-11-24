@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "extraKnownMarketplaces": {
+    "project-plugins": {
+      "source": {
+        "source": "local",
+        "path": "./.claude/plugins"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "sf-project-flow@project-plugins": true
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "statusMessage": "Checking for an org write",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/sf-org-write-ask.sh"
+          },
+          {
+            "type": "command",
+            "statusMessage": "Checking for a push that skips the default-branch check",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/protected-path-guard.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__.*(gitlab|github)__(push_files|create_or_update_file)",
+        "hooks": [
+          {
+            "type": "command",
+            "statusMessage": "Checking for protected paths written to the default branch",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/protected-path-guard.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

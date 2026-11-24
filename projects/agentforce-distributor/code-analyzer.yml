@@ -1,0 +1,59 @@
+# Salesforce Code Analyzer v5 settings for this repository (docs/engineering/development-foundation.md §1.5).
+# Only what differs from the analyzer's defaults lives here. Run it with `npm run scan`.
+
+ignores:
+    files:
+        - "**/node_modules/**"
+        - ".worktrees/**"
+        - "IlluminatedCloud/**"
+        # Third-party code, kept as its authors published it (docs/engineering/architecture.md §5).
+        - "**/vendor/**"
+
+rules:
+    pmd:
+        # The convention is a header comment on every class (development-foundation.md §2.3), not ApexDoc on every method.
+        ApexDoc:
+            disabled: true
+
+# The project's own checks (code-review-rules.md §2), each tagged Recommended by default, so `npm run scan`
+# and the pipeline run them. A new one gets a rule ID in code-review-rules.md in the same merge request.
+engines:
+    regex:
+        custom_rules:
+            # APX-41: records are written only through DstDml, so a unit test can replace every write
+            # (development-foundation.md §2.3, DML mode). A test class writes its own records, so a match after @IsTest
+            # in its file is not reported; DstDatabaseDml, the one class that calls Database, is suppressed
+            # below. A project without the DML layer of §3 F-9 sets `disabled: true` under rules.regex instead.
+            DmlOnlyThroughDmlClass:
+                regex: '/(?:\bDatabase\.(?:insert|update|upsert|delete|undelete|merge)\s*\(|^[ \t]*(?:insert|update|upsert|delete|undelete|merge)\s+[\w(])(?<!@IsTest[\s\S]*)/gim'
+                file_extensions: [".cls", ".trigger"]
+                description: "Records are written only through DstDml, with a DstDmlMode, so a unit test can replace the write (APX-41)."
+                violation_message: "A write outside DstDml: call DstDml (insertAll, insertEach, updateAll, updateEach, upsertAll, deleteEach) with a DstDmlMode instead (APX-41)."
+                severity: "Moderate"
+            # MDT-16: a label's short description becomes its MasterLabel, which Salesforce keeps to 80 characters; a longer
+            # one fails the deployment, and with it every class that reads the label. The match starts at the label's
+            # <fullName>, so the finding's line is the label's name; it expects <fullName> before <shortDescription>, the
+            # order Salesforce writes. An entity such as &apos; counts as the one character it stands for.
+            LabelShortDescriptionMax80:
+                regex: '/<fullName>[^<]*<\/fullName>(?:(?!<\/labels>)[\s\S])*?<shortDescription>(?:[^<&]|&[^;<]*;){81,}<\/shortDescription>/g'
+                file_extensions: [".labels-meta.xml"]
+                description: "A custom label's short description is at most 80 characters, the most Salesforce takes for its MasterLabel (MDT-16)."
+                violation_message: "This label's short description is over 80 characters: the deployment refuses it (MasterLabel maximum length is 80) and the classes that read the label do not compile. Shorten it to 80 or fewer (MDT-16)."
+                severity: "Moderate"
+
+# Findings that stay by design (code-review-rules.md §2, Exceptions). Each entry names the rule, the most
+# findings it may hide in that file, and why; a new finding of the same rule beyond the count still shows.
+# Paths are relative to the --workspace of `npm run scan` and the pipeline, the build folder force-app/distributor.
+# A comment above each entry gives the reason and the rule ID or issue key it answers to.
+suppressions:
+    disable_suppressions: false
+    # Examples, for the foundation of development-foundation.md §3; uncomment when the class exists.
+    # "classes/DstTriggerHandler.cls":
+    #     # The empty virtual handlers (beforeInsert … afterUndelete) are the framework's extension points: a
+    #     # handler overrides only the events it needs (development-foundation.md §3 F-1).
+    #     - rule_selector: "pmd:EmptyStatementBlock"
+    #       max_suppressed_violations: 7
+    # "classes/DstDatabaseDml.cls":
+    #     # The one class that calls Database: every other write goes through it (APX-41).
+    #     - rule_selector: "regex:DmlOnlyThroughDmlClass"
+    #       max_suppressed_violations: 6

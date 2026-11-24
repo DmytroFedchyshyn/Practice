@@ -1,0 +1,8 @@
+# Text files are stored with LF, whatever the author's platform: a file committed with CRLF makes every
+# later edit from another platform rewrite the whole file in the diff.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.docx binary
+*.xlsx binary
+*.pdf binary

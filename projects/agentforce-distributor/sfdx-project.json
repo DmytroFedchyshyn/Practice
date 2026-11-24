@@ -1,8 +1,14 @@
 {
   "packageDirectories": [
     {
-      "path": "agentforce",
+      "path": "force-app/distributor",
       "default": true
+    },
+    {
+      "path": "force-app/main/default"
+    },
+    {
+      "path": "agentforce"
     }
   ],
   "name": "agentforce-distributor",

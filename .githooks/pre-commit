@@ -1,0 +1,26 @@
+#!/bin/sh
+# Pre-commit for a repository that holds several projects of the kit, each in its own folder with its
+# own project.config.json. Git runs the hooks of the repository's root only, so this one runs the
+# pre-commit hook of every project whose folder the commit changes, from that folder. When the commit
+# changes no project, it scans the staged changes for secrets itself.
+#
+# Skip it for one commit with `git commit --no-verify`.
+
+status=0
+ran=""
+for config in $(git ls-files --cached -- '*project.config.json'); do
+    dir=$(dirname "$config")
+    [ -x "$dir/.githooks/pre-commit" ] || continue
+    [ -n "$(git diff --cached --name-only -- "$dir")" ] || continue
+    echo "pre-commit: $dir" >&2
+    (cd "$dir" && ./.githooks/pre-commit) || status=1
+    ran=1
+done
+
+if [ -z "$ran" ] && command -v gitleaks >/dev/null 2>&1; then
+    if ! gitleaks git --pre-commit --staged --redact --no-banner --verbose; then
+        echo "pre-commit: gitleaks found a possible secret in the staged changes; the commit was stopped." >&2
+        status=1
+    fi
+fi
+exit $status

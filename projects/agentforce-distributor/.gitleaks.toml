@@ -1,0 +1,13 @@
+# Gitleaks settings (docs/engineering/development-foundation.md §1.5): the default rules, plus the known
+# false positives of Salesforce metadata. Each allowlist says what it lets through and why.
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Compiled LWR site bundles retrieved from the org: generated LWC stylesheet tokens and API names, not keys"
+paths = ['''staticresources/[^/]+/webruntime/''']
+
+[[allowlists]]
+description = "Experience Cloud site config: the ids of the site's routes and views, not keys"
+regexTarget = "line"
+regexes = ['''"[A-Za-z]+(Route|View)Id"\s*:''']

@@ -1,0 +1,19 @@
+{
+  "project": "agentforce-distributor",
+  "kit": { "version": "1.1.1", "commit": "4287dcd" },
+  "defaultBranch": "master",
+  "buildDir": "force-app/distributor",
+  "snapshotDir": "force-app/main/default",
+  "protectedPaths": ["force-app/"],
+  "runbook": "docs/engineering/release-runbook.md",
+  "ciOrgAlias": "agentforce-ci",
+  "reviewMarker": "dst-review",
+  "features": [
+    {
+      "slug": "foundation",
+      "label": "Foundation",
+      "dependsOn": [],
+      "paths": ["**"]
+    }
+  ]
+}

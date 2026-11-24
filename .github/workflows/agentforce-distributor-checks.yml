@@ -1,0 +1,137 @@
+# Code checks and the components' Jest tests on every pull request and on the default branch
+# (docs/engineering/development-foundation.md §1.5, docs/engineering/ci-cd.md).
+#
+# The same checks as the GitLab pipeline, run by the same scripts in tools/ci/ and npm scripts. A
+# finding turns its job red; which jobs a pull request must pass is set in the branch ruleset
+# (docs/engineering/ci-cd.md). Code Analyzer and gitleaks findings are uploaded as SARIF to code
+# scanning, which annotates the pull request's lines — GitHub's counterpart of the GitLab review
+# threads. Documentation-only changes skip this workflow; secrets.yml runs on everything.
+name: Agentforce Distributor · Checks
+
+on:
+  pull_request:
+    paths:
+      - "projects/agentforce-distributor/force-app/distributor/**"
+      - projects/agentforce-distributor/code-analyzer.yml
+      - projects/agentforce-distributor/.prettierrc
+      - projects/agentforce-distributor/.prettierignore
+      - projects/agentforce-distributor/eslint.config.js
+      - projects/agentforce-distributor/package.json
+      - projects/agentforce-distributor/package-lock.json
+      - projects/agentforce-distributor/jest.config.js
+      - projects/agentforce-distributor/sfdx-project.json
+      - projects/agentforce-distributor/project.config.json
+      - projects/agentforce-distributor/tools/ci/**
+      - .github/workflows/agentforce-distributor-checks.yml
+  push:
+    branches: ["master"]
+    paths:
+      - "projects/agentforce-distributor/force-app/distributor/**"
+      - projects/agentforce-distributor/code-analyzer.yml
+      - projects/agentforce-distributor/.prettierrc
+      - projects/agentforce-distributor/.prettierignore
+      - projects/agentforce-distributor/eslint.config.js
+      - projects/agentforce-distributor/package.json
+      - projects/agentforce-distributor/package-lock.json
+      - projects/agentforce-distributor/jest.config.js
+      - projects/agentforce-distributor/sfdx-project.json
+      - projects/agentforce-distributor/project.config.json
+      - projects/agentforce-distributor/tools/ci/**
+      - .github/workflows/agentforce-distributor-checks.yml
+
+concurrency:
+  group: agentforce-distributor-checks-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "22"
+  SF_CLI_VERSION: "2.159.7"
+  CODE_ANALYZER_VERSION: "5.16.0"
+
+defaults:
+  run:
+    working-directory: projects/agentforce-distributor
+
+jobs:
+  # Prettier: is the build folder formatted? `npm run format` fixes it locally.
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: projects/agentforce-distributor/package-lock.json
+      - run: npm ci --no-fund --no-audit --ignore-scripts
+      - run: npm run format:check
+
+  # ESLint: the Aura and LWC JavaScript of the build folder. `npm run lint` runs the same locally.
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: projects/agentforce-distributor/package-lock.json
+      - run: npm ci --no-fund --no-audit --ignore-scripts
+      - run: npm run lint
+
+  # Jest: the tests of the Lightning web components (docs/engineering/architecture.md §4.5, LWC-05).
+  lwc-jest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: projects/agentforce-distributor/package-lock.json
+      - run: npm ci --no-fund --no-audit --ignore-scripts
+      - run: npm run test:ci
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jest
+          path: projects/agentforce-distributor/reports/jest.xml
+          if-no-files-found: ignore
+
+  # Salesforce Code Analyzer on the build folder. A finding of High or above fails the job; every
+  # finding is uploaded to code scanning and listed in the job log with a link to its line.
+  code-analyzer:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    env:
+      SF_DISABLE_TELEMETRY: "true"
+      SF_AUTOUPDATE_DISABLE: "true"
+      SF_HIDE_RELEASE_NOTES: "true"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - run: npm install --global --no-fund --no-audit "@salesforce/cli@${SF_CLI_VERSION}" > /dev/null
+      - run: sf plugins install "code-analyzer@${CODE_ANALYZER_VERSION}"
+      - run: bash tools/ci/code-analyzer.sh
+      - uses: github/codeql-action/upload-sarif@v3
+        if: always() && hashFiles('projects/agentforce-distributor/reports/code-analyzer.sarif') != ''
+        with:
+          sarif_file: projects/agentforce-distributor/reports/code-analyzer.sarif
+          category: code-analyzer
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: code-analyzer
+          path: projects/agentforce-distributor/reports/code-analyzer.*
+          if-no-files-found: ignore
