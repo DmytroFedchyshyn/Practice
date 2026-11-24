@@ -26,6 +26,14 @@ Decisions, pitfalls, and open questions, logged as they happen. Raw material for
 
 A custom lookup to `Product2` with `required=true` (delete constraint Restrict) fails with "Cannot add a lookup relationship child with cascade or restrict options to Product2". The check-only deploy caught it. Fix: optional lookup with `SetNull` plus a validation rule (`Product_Required`). Side effect: the field is no longer universally required, so it needs explicit field-level security in permission sets.
 
+### Fields deployed through the Metadata API have no field-level security (2026-11-24)
+
+After the data model deploy the System Administrator saw only the required custom fields; all five new `Order` fields were invisible. Fields created through the Metadata API get no FLS in any profile, while the Setup wizard sets it for you, so this never shows up when you build by clicks. Required fields are always visible, which hides the problem until you look for an optional one. Fix: grant FLS in a permission set that lives in the repo and assign it.
+
+### Apex is case-insensitive, including for names (2026-11-24)
+
+The seed class had a constant `PRODUCTS` and a method parameter `products`. In Apex these are the same identifier, so inside the method the parameter (a `Map`) shadowed the constant (a `List`), and compilation failed with "Loop must iterate over collection" and "Expression must be a list type". Fix: constants named `*_ROWS`. Lesson: never reuse a name that differs only by case.
+
 ## Phase 0 findings (Developer Edition, API 68.0)
 
 - Licences are present for the whole plan: Partner Community and Customer Community (5 each), Agentforce Service Agent User, Enhanced Chat User, Data Cloud, Prompt Templates.
