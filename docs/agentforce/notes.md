@@ -42,7 +42,11 @@ The seed class had a constant `PRODUCTS` and a method parameter `products`. In A
 - "Messaging for In-App and Web" is now called Enhanced Chat.
 - Developer Edition allows 150 LLM generation requests per hour. Expect this to matter for Testing Center runs.
 - Data 360 developer org limits per the docs: one data space, 100 data streams, ruleset runs are not scheduled.
-- Agent metadata has two models. Agent Script keeps a design-time `AiAuthoringBundle` (`.agent` file) that is published into runtime `Bot` and `GenAiPlannerBundle` metadata. Deploying only the authoring bundle to an org that does not have the agent yet fails; `Bot`/`BotVersion` are needed too.
+- Agent metadata has two models. Agent Script keeps a design-time `AiAuthoringBundle` (`.agent` file) that `sf agent publish authoring-bundle` turns into runtime metadata. Building an agent without Agent Script is now labelled legacy in the docs.
+- **Correction (phase 2 research):** in API v68 (Winter '27) the runtime types are `AiAgentDefinition` and `AiAgentDefinitionVersion`, plus `GenAiPlugin` (subagent) and `GenAiFunction` (action). `Bot`/`BotVersion` are used only by Einstein Bots and `GenAiPlannerBundle` no longer exists. The earlier note that a deploy needs `Bot`/`BotVersion` came from v67-era sources. Both orgs must be on v68 to move agents with the new types.
+- In Agent Script, topics are called subagents. Actions point straight at their implementation with `target: "apex://Class"`, `"flow://Flow"` or `"prompt://Template"`; `reasoning.actions` exposes them to the LLM as tools, `run @actions.x` calls them deterministically, `available when` gates them.
+- `sf agent test` and `AiEvaluationDefinition` are documented as the pro-code side of the legacy Testing Center; a new Testing Center in Agentforce Studio is in beta and its pro-code docs are not out yet.
+- `developer.salesforce.com` refuses scripted fetches (HTTP 403). The docs pages have Markdown twins (`.md` instead of `.html`) that load fine in a browser.
 
 ## Open questions
 
