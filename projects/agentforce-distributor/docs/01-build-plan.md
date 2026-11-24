@@ -63,7 +63,7 @@ The project adopts the owner's Salesforce delivery kit as its base, since kit 1.
 - [x] M4a: `DstDml`, every write through it (PR #2, deployed). The rest of M4 — Parameters, Switches, Logger, test libraries — is not done: the practice profile does not ask for it (D-44)
 - [x] ~~M5: prefixed metadata in the org~~ — dropped: the practice profile asks for no prefixes; names stay as they are (D-45)
 - [x] Practice profile: the project moves from the kit's delivery profile to its practice profile (kit 1.2.0, D-43)
-- [ ] M6: resume phase 2 — prompt template, Agent Script, agent tests
+- [ ] M6: resume phase 2 — prompt template (done), Agent Script (draft in Builder, live test passed on seven scenarios), agent tests
 
 ## Phase 3: Data Cloud
 
