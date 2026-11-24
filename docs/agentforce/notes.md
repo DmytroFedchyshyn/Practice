@@ -26,6 +26,9 @@ Decisions, pitfalls, and open questions, logged as they happen. Raw material for
 | 2026-11-24 | The Flow action returns a `Return_Request__c` record collection: all statuses with an optional status filter, newest 10 | Tries the documented `list[object]` output; the agent picks the fields to show |
 | 2026-11-24 | Formula fields `Order_Number__c` and `Product_Name__c` on `Return_Request__c` | Flow Get Records cannot read relationship fields; without them the agent would show Ids |
 | 2026-11-24 | The flow runs in `DefaultMode` | A flow action runs in user context, so sharing and field access of the agent user (and later the partner) apply |
+| 2026-11-24 | Agent user access lives in the repo: `Distributor_Agent_Access` on the Einstein Agent licence, not the generated `[Agent]_Permissions` set | Versioned and reviewed with the actions it unlocks; the help page requires the Einstein Agent licence for a custom set |
+| 2026-11-24 | `Return_Request__c` stays Private; a sharing rule gives the `Partner_Service_Agent` role read access to all requests | Recommended by the help page; other internal users keep their access; actions scope results to the session's account |
+| 2026-11-24 | Two agent users: the first created in Setup, the second with `sf org create agent-user` | Learn both ways; the Einstein Agent licence has 201 seats in the Developer Edition |
 | 2026-11-24 | Deactivated the 17 Developer Edition demo products (`IsActive = false`, not deleted) | The catalogue should be the distributor's; stock search only looks at active products |
 
 ## Pitfalls
@@ -57,6 +60,10 @@ The bulk test for return requests failed with "Too many SOQL queries: 101" altho
 ### Bind variables work in a subquery LIMIT (2026-11-24)
 
 `(SELECT Id FROM Orders ORDER BY EffectiveDate DESC LIMIT :RECENT_ORDER_LIMIT)` compiles and runs, so the per-account limit can be a named constant instead of a magic number.
+
+### Role and permission set metadata have tight limits (2026-11-24)
+
+A permission set description is at most 255 characters and a role description at most 80. A role's opportunity and case access levels cannot be below the org-wide default (here `Edit`, because both objects are Public Read/Write). A sharing rule that targets a role in the same deploy fails with "no Role named ... found" when the role itself fails; fix the role first.
 
 ### Test data hides what the real org contains (2026-11-24)
 

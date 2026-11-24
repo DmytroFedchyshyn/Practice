@@ -37,7 +37,9 @@ A hands-on reference build in a Developer Edition org with Agentforce and Data 3
 - [x] Decide: the partner account comes from a session variable in phase 2; the portal sets it from the logged-in user in phase 4
 - [x] Decide: "list my return requests" is the Flow action, the rest are Apex
 - [x] Decide: Agent Script; Git holds the `AiAuthoringBundle` and the action implementations, not generated runtime metadata (see [research](research-agent-authoring.md))
-- [ ] Agent user, created by hand in Setup, plus a permission set for it in the repo
+- [x] Agent user access in the repo: permission set `Distributor_Agent_Access` (Einstein Agent licence), role `Partner_Service_Agent`, read sharing rule on `Return_Request__c` (validated, not deployed)
+- [ ] First agent user, created by hand in Setup
+- [ ] Second agent user, created with `sf org create agent-user`, to compare the two ways
 - [x] Apex service layer and invocable wrappers: order status, stock availability, create return request (validated, not deployed)
 - [x] Flow action: list the partner's return requests (`List_Return_Requests`, record collection output, Apex test; deployed and smoke-tested)
 - [ ] Confirm in the agent that a record collection works as a Flow action output; if not, switch to a text output
