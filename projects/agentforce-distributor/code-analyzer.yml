@@ -53,7 +53,12 @@ suppressions:
     #     # handler overrides only the events it needs (development-foundation.md §3 F-1).
     #     - rule_selector: "pmd:EmptyStatementBlock"
     #       max_suppressed_violations: 7
-    # "classes/DstDatabaseDml.cls":
-    #     # The one class that calls Database: every other write goes through it (APX-41).
-    #     - rule_selector: "regex:DmlOnlyThroughDmlClass"
-    #       max_suppressed_violations: 6
+    "classes/DstDatabaseDml.cls":
+        # The one class that calls Database: every other write goes through it (APX-41). Each operation is in
+        # both writers, the with sharing one and the without sharing one.
+        - rule_selector: "regex:DmlOnlyThroughDmlClass"
+          max_suppressed_violations: 10
+        # Every Database call passes the AccessLevel the caller's DstDmlMode names (USER_MODE or SYSTEM_MODE), and
+        # each system mode carries its reason at the call (SEC-04); PMD cannot read a level held in a variable.
+        - rule_selector: "pmd:ApexCRUDViolation"
+          max_suppressed_violations: 12

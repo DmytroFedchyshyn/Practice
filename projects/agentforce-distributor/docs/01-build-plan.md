@@ -60,7 +60,7 @@ The project adopts the owner's Salesforce delivery kit as its base. Phase 2 resu
 - [x] M1: repository layout — `projects/agentforce-distributor/`, `exercises/`, root README and shared CLAUDE.md
 - [x] M2: copy the kit into this project with `init.sh` (prefixes `DST_` / `Dst` / `dst`, GitHub, the repository's issues; kit 1.1.1, values in `kit.env`)
 - [x] M3: move the metadata into the kit's layout (flat by type, features in `project.config.json`), docs into the kit's documents (validated with 53 tests; on the local branch `meta/kit-layout`)
-- [ ] M4: foundation in code — Dml, Parameters (the return window), Logger, Switches for agent actions, test data factory, apex-mockery and SObject Fabricator; selectors and services as instances
+- [ ] M4: foundation in code (M4a `DstDml` done; M4b Parameters, M4c Switches, M4d trigger base and Logger, M4e test data factory and libraries to go) — — Dml, Parameters (the return window), Logger, Switches for agent actions, test data factory, apex-mockery and SObject Fabricator; selectors and services as instances
 - [ ] M5: prefixed metadata in the org — deploy, reseed, reassign the agent users, then remove the old metadata (each step after approval)
 - [ ] M6: resume phase 2 — prompt template, Agent Script, agent tests
 

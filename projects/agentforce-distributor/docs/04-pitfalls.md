@@ -66,3 +66,21 @@ the kit: the Code Analyzer job log links each finding to `force-app/...` without
 repository of several projects the links lead nowhere; and the kit's own `deploy-build.sh` is refused by
 Claude Code's auto mode, because the same script can deploy, so validations run as `sf project deploy validate`.
 
+## User mode refuses access with a SecurityException, not a DmlException (2026-11-24)
+
+A user without create access to an object, writing in user mode with all-or-none, gets a `SecurityException`
+("Access to entity ... denied"), which a `catch (DmlException e)` does not catch. The same write as a partial
+save (`allOrNone = false`) gets a per-record error instead (`CANNOT_INSERT_UPDATE_ACTIVATE_ENTITY`).
+`DstDatabaseDml` handles both. A candidate for the kit's F-9.
+
+## Apex upserts only a list of a concrete type (2026-11-24)
+
+`Database.upsert` on a `List<SObject>` fails at run time; the list's type must be known. `DstDatabaseDml`
+copies the records into a list made with `Type.forName('List<' + objectName + '>')` before it upserts.
+
+## Code Analyzer cannot read an access level held in a variable (2026-11-24)
+
+`pmd:ApexCRUDViolation` reports every `Database` call of `DstDatabaseDml`, because the `AccessLevel` comes from
+the caller's `DstDmlMode` rather than a literal. The project suppresses it for that one class in
+`code-analyzer.yml`, with the reason; the kit's example suppression for `DstDatabaseDml` should carry it too.
+

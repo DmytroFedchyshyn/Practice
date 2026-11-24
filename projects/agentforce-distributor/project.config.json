@@ -19,6 +19,7 @@
       "label": "Foundation",
       "dependsOn": [],
       "paths": [
+        "classes/Dst*",
         "objects/**",
         "tabs/**",
         "roles/**",
