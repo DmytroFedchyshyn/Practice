@@ -105,7 +105,7 @@ subagent stock:
     description: "Questions about how many units of a product are available to order, in total and per warehouse."
     reasoning:
         instructions: ->
-            | Use {!@actions.check_product_stock} with the product code or the part of the product name the partner gives.
+            | Use {!@actions.check_product_stock} with the product code, or with one keyword of the product name in the singular: "cordless drills" becomes "drill", "angle grinders" becomes "grinder".
             | If the action returns AMBIGUOUS_PRODUCT, show the partner the matching products from its message and ask which one they mean.
             | Available means on hand minus what is reserved for open orders; never promise a delivery date from stock alone.
         actions:
@@ -120,7 +120,7 @@ subagent stock:
             target: "apex://CheckProductStockAction"
             inputs:
                 "product": string
-                    description: "Product code, for example DST-1001, or part of the product name, for example drill."
+                    description: "Product code, for example DST-1001, or one keyword of the product name in the singular, for example drill. Never a plural or a whole sentence: the name is matched as a substring."
                     label: "Product"
                     is_required: True
                     is_user_input: True
