@@ -78,3 +78,9 @@ save (`allOrNone = false`) gets a per-record error instead (`CANNOT_INSERT_UPDAT
 `Database.upsert` on a `List<SObject>` fails at run time; the list's type must be known. `DstDatabaseDml`
 copies the records into a list made with `Type.forName('List<' + objectName + '>')` before it upserts.
 
+## Code Analyzer cannot read an access level held in a variable (2026-11-24)
+
+`pmd:ApexCRUDViolation` reports every `Database` call of `DstDatabaseDml`, because the `AccessLevel` comes from
+the caller's `DstDmlMode` rather than a literal. The project suppresses it for that one class in
+`code-analyzer.yml`, with the reason; the kit's example suppression for `DstDatabaseDml` should carry it too.
+

@@ -58,3 +58,7 @@ suppressions:
         # both writers, the with sharing one and the without sharing one.
         - rule_selector: "regex:DmlOnlyThroughDmlClass"
           max_suppressed_violations: 10
+        # Every Database call passes the AccessLevel the caller's DstDmlMode names (USER_MODE or SYSTEM_MODE), and
+        # each system mode carries its reason at the call (SEC-04); PMD cannot read a level held in a variable.
+        - rule_selector: "pmd:ApexCRUDViolation"
+          max_suppressed_violations: 12
