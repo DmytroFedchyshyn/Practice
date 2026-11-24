@@ -5,8 +5,12 @@ Salesforce practice: Agentforce and Data Cloud, classic algorithms and Gang of F
 ## Structure
 
 ```
-agentforce/                       # package directory (default)
-                                  Agentforce agents, topics, actions and Data Cloud setup (work in progress)
+agentforce/                       # package directory (default), work in progress
+├── main/default/                 Agent, topics, actions, data model, Data Cloud and site metadata
+├── data/                         Seed data: CSV files and load plan (not deployed)
+└── scripts/                      Anonymous Apex and helper scripts (not deployed)
+
+docs/agentforce/                  Plan with per-phase checklists, decisions and pitfalls
 
 algorithms/                       # package directory
 ├── binary-search/                BinarySearch
@@ -49,6 +53,10 @@ sf apex run test --test-level RunLocalTests --target-org practice --wait 10
 ```
 
 Swap `design-patterns` for `algorithms` or `trailhead` to deploy another topic, or deploy everything with `sf project deploy start --target-org practice`.
+
+## Agentforce + Data Cloud reference build
+
+A fictional distributor runs a partner portal on Experience Cloud. A logged-in partner asks an agent about order status, stock levels and their requests; the agent answers from org data and Data Cloud, and performs actions. All companies and data are invented. The phases and their status are in [docs/agentforce/plan.md](docs/agentforce/plan.md), decisions and pitfalls in [docs/agentforce/notes.md](docs/agentforce/notes.md).
 
 `agentforce` is the default package directory, so metadata retrieved from an org lands there. Agentforce needs an org with Agentforce and Data Cloud enabled (for example an Agentforce Developer Edition):
 

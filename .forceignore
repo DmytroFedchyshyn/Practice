@@ -7,6 +7,10 @@ package.xml
 # Placeholders that keep empty package directories in git
 **/.gitkeep
 
+# Seed data and scripts that live inside a package directory
+agentforce/data/**
+agentforce/scripts/**
+
 # LWC configuration files
 **/jsconfig.json
 **/.eslintrc.json
