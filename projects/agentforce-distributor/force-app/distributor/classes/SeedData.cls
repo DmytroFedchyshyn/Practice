@@ -9,11 +9,17 @@
  *
  * All companies, people and numbers are invented.
  *
- * Every query and write runs in system mode, named on the statement: this is a data loader that an
+ * Every query runs in system mode, named on the statement, and every write through DstDml in
+ * SYSTEM_WITH_SHARING: this is a data loader that an
  * administrator runs from anonymous Apex, and tests run to build their data, not code that acts for a user.
  * The user's own object and field access must not decide which demo records exist.
  */
 public with sharing class SeedData {
+    // System mode within the sharing rules: see the class header.
+    private static final DstDmlMode MODE = DstDmlMode.SYSTEM_WITH_SHARING;
+    @TestVisible
+    private static DstDml dml = DstDmlProvider.get();
+
     @TestVisible
     private static final String PRODUCT_CODE_PREFIX = 'DST-';
     @TestVisible
@@ -125,7 +131,7 @@ public with sharing class SeedData {
                 new Account(Partner_Code__c = row[0], Name = row[1], Partner_Tier__c = row[2], BillingCity = row[3])
             );
         }
-        upsert as system records Partner_Code__c;
+        dml.upsertAll(records, Account.Partner_Code__c, MODE);
 
         Map<String, Account> byCode = new Map<String, Account>();
         for (Account record : records) {
@@ -157,7 +163,7 @@ public with sharing class SeedData {
                 primaryByCode.put(row[0], record);
             }
         }
-        upsert as system records;
+        dml.upsertAll(records, null, MODE);
         return primaryByCode;
     }
 
@@ -179,7 +185,7 @@ public with sharing class SeedData {
             record.IsActive = true;
             byCode.put(code, record);
         }
-        upsert as system byCode.values();
+        dml.upsertAll(byCode.values(), null, MODE);
         return byCode;
     }
 
@@ -198,7 +204,7 @@ public with sharing class SeedData {
         Pricebook2 record = existing.isEmpty() ? new Pricebook2(Name = PRICE_BOOK_NAME) : existing[0];
         record.IsActive = true;
         record.Description = 'Partner prices for the distributor demo data.';
-        upsert as system record;
+        dml.upsertAll(new List<Pricebook2>{ record }, null, MODE);
         return record.Id;
     }
 
@@ -240,7 +246,7 @@ public with sharing class SeedData {
                 records.add(entry);
             }
         }
-        upsert as system records;
+        dml.upsertAll(records, null, MODE);
 
         Map<Id, PricebookEntry> partnerEntries = new Map<Id, PricebookEntry>();
         for (PricebookEntry entry : records) {
@@ -256,7 +262,7 @@ public with sharing class SeedData {
         for (List<String> row : WAREHOUSE_ROWS) {
             records.add(new Warehouse__c(Code__c = row[0], Name = row[1], City__c = row[2], Is_Active__c = true));
         }
-        upsert as system records Code__c;
+        dml.upsertAll(records, Warehouse__c.Code__c, MODE);
 
         Map<String, Warehouse__c> byCode = new Map<String, Warehouse__c>();
         for (Warehouse__c record : records) {
@@ -300,13 +306,13 @@ public with sharing class SeedData {
                 records.add(record);
             }
         }
-        upsert as system records;
+        dml.upsertAll(records, null, MODE);
         return records;
     }
 
     /** Activated orders cannot be deleted, so they go back to Draft first. */
     private static void deleteTransactions(List<Account> accounts) {
-        delete as system [SELECT Id FROM Return_Request__c WHERE Account__c IN :accounts WITH SYSTEM_MODE];
+        dml.deleteAll([SELECT Id FROM Return_Request__c WHERE Account__c IN :accounts WITH SYSTEM_MODE], MODE);
 
         List<Order> orders = [SELECT Id, Status FROM Order WHERE AccountId IN :accounts WITH SYSTEM_MODE];
         List<Order> activated = new List<Order>();
@@ -316,8 +322,8 @@ public with sharing class SeedData {
                 activated.add(record);
             }
         }
-        update as system activated;
-        delete as system orders;
+        dml.updateAll(activated, MODE);
+        dml.deleteAll(orders, MODE);
     }
 
     /** @return orders per partner code, in the same order as ORDER_SHAPES */
@@ -362,7 +368,7 @@ public with sharing class SeedData {
             byPartner.put(partnerCode, partnerOrders);
             orders.addAll(partnerOrders);
         }
-        insert as system orders;
+        dml.insertAll(orders, MODE);
 
         // Two lines per order, spread over the catalogue so partners differ.
         List<OrderItem> items = new List<OrderItem>();
@@ -375,7 +381,7 @@ public with sharing class SeedData {
                 items.add(newItem(partnerOrders[s], entries.get(second.Id), 2 + p));
             }
         }
-        insert as system items;
+        dml.insertAll(items, MODE);
 
         // An order can only be activated once it has products. Cancelled orders stay in Draft.
         List<Order> toActivate = new List<Order>();
@@ -384,7 +390,7 @@ public with sharing class SeedData {
                 toActivate.add(new Order(Id = record.Id, Status = 'Activated'));
             }
         }
-        update as system toActivate;
+        dml.updateAll(toActivate, MODE);
         return byPartner;
     }
 
@@ -436,7 +442,7 @@ public with sharing class SeedData {
                 )
             );
         }
-        insert as system records;
+        dml.insertAll(records, MODE);
         return records;
     }
 }

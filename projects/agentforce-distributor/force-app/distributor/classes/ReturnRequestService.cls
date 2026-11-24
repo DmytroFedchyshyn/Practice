@@ -8,6 +8,9 @@
  * Bulk-safe: at most four queries and one DML statement per call.
  */
 public with sharing class ReturnRequestService {
+    @TestVisible
+    private static DstDml dml = DstDmlProvider.get();
+
     public class ReturnInput {
         public Id accountId;
         /** Optional. The partner contact who asks; must belong to the partner. */
@@ -195,28 +198,24 @@ public with sharing class ReturnRequestService {
         if (records.isEmpty()) {
             return;
         }
-        List<Database.SaveResult> saves = Database.insert(records, false, AccessLevel.USER_MODE);
+        List<DstDmlResult> saves = dml.insertEach(records, DstDmlMode.USER);
         Set<Id> savedIds = new Set<Id>();
-        for (Database.SaveResult outcome : saves) {
-            if (outcome.isSuccess()) {
-                savedIds.add(outcome.getId());
+        for (DstDmlResult outcome : saves) {
+            if (outcome.success) {
+                savedIds.add(outcome.recordId);
             }
         }
         Map<Id, Return_Request__c> saved = ReturnRequestSelector.selectByIds(savedIds);
 
         for (Integer i = 0; i < saves.size(); i++) {
             ReturnResult result = pending[i];
-            if (!saves[i].isSuccess()) {
-                fail(
-                    result,
-                    'SAVE_FAILED',
-                    'The return request could not be saved: ' + saves[i].getErrors()[0].getMessage()
-                );
+            if (!saves[i].success) {
+                fail(result, 'SAVE_FAILED', 'The return request could not be saved: ' + saves[i].firstMessage());
                 continue;
             }
-            Return_Request__c record = saved.get(saves[i].getId());
+            Return_Request__c record = saved.get(saves[i].recordId);
             result.success = true;
-            result.recordId = saves[i].getId();
+            result.recordId = saves[i].recordId;
             result.requestNumber = record?.Name;
             result.status = record == null ? ReturnPolicy.STATUS_SUBMITTED : record.Status__c;
             result.message =
