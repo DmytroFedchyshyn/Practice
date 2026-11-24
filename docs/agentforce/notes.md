@@ -15,6 +15,12 @@ Decisions, pitfalls, and open questions, logged as they happen. Raw material for
 | 2026-11-24 | `Return_Request__c` uses lookups to `Account` and `Order`, not master-detail; sharing is Private | Keeps the sharing design open for phase 4, where we decide how a partner gets access |
 | 2026-11-24 | External ids on `Account`, `Warehouse__c`, `Stock_Level__c` | Idempotent seed upserts now, join keys for the ERP feed in Data Cloud later |
 | 2026-11-24 | Seed data through an Apex script | Idempotent, dates relative to today, handles price book entries and order activation |
+| 2026-11-24 | Agent Script; Git keeps the `AiAuthoringBundle` plus Apex, Flow and prompt templates, not the generated runtime metadata | Salesforce's recommended pipeline (deploy, publish, activate); reviews show the readable `.agent` file |
+| 2026-11-24 | Actions report rule failures as an error code plus one sentence, never as exceptions | The LLM can pass the sentence on; one bad request in a bulk call does not fail the others |
+| 2026-11-24 | Action outputs are plain text lines, not Apex-defined types | Works with any agent setup today; structured outputs (custom Lightning types) can come later |
+| 2026-11-24 | Services query and insert in user mode (`WITH USER_MODE`, `AccessLevel.USER_MODE`) and are `with sharing` | The agent user's and, in phase 4, the partner's own permissions decide what is visible |
+| 2026-11-24 | An order of another partner gets the same answer as a missing order | The agent cannot be used to probe which order numbers exist |
+| 2026-11-24 | Return policy in code: delivered, within 30 days, product on the order, quantity not above ordered minus open requests | Deterministic rules belong in Apex, not in prompt instructions |
 
 ## Pitfalls
 
@@ -33,6 +39,14 @@ After the data model deploy the System Administrator saw only the required custo
 ### Apex is case-insensitive, including for names (2026-11-24)
 
 The seed class had a constant `PRODUCTS` and a method parameter `products`. In Apex these are the same identifier, so inside the method the parameter (a `Map`) shadowed the constant (a `List`), and compilation failed with "Loop must iterate over collection" and "Expression must be a list type". Fix: constants named `*_ROWS`. Lesson: never reuse a name that differs only by case.
+
+### User-mode queries need a known test user (2026-11-24)
+
+The services query `WITH USER_MODE`, so a test that runs as the deploying admin depends on whatever permission sets that admin happens to have. The tests create their own user with only `Distributor_Data_Admin` and run as that user. Inserting a user and a permission set assignment in the same transaction as data causes `MIXED_DML_OPERATION`; wrapping the setup-object inserts in `System.runAs` avoids it.
+
+### A test helper can blow the SOQL limit that the code under test respects (2026-11-24)
+
+The bulk test for return requests failed with "Too many SOQL queries: 101" although the service itself uses four. The test's own input helper looked up the account on every call, 180 times. Fix: look up once outside the loop. Lesson: measure the code under test with `Limits.getQueries()` before and after, and keep test helpers out of loops too.
 
 ## Phase 0 findings (Developer Edition, API 68.0)
 

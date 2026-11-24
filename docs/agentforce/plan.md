@@ -36,12 +36,13 @@ A hands-on reference build in a Developer Edition org with Agentforce and Data 3
 - [x] Decide: Service agent from the start, with a dedicated agent user
 - [x] Decide: the partner account comes from a session variable in phase 2; the portal sets it from the logged-in user in phase 4
 - [x] Decide: "list my return requests" is the Flow action, the rest are Apex
-- [ ] Decide: Agent Script authoring bundle and what goes into Git (see [research](research-agent-authoring.md))
+- [x] Decide: Agent Script; Git holds the `AiAuthoringBundle` and the action implementations, not generated runtime metadata (see [research](research-agent-authoring.md))
 - [ ] Agent user, created by hand in Setup, plus a permission set for it in the repo
-- [ ] Apex service layer and invocable wrappers: order status, stock availability, create return request
+- [x] Apex service layer and invocable wrappers: order status, stock availability, create return request (validated, not deployed)
 - [ ] Flow action: list the partner's return requests
 - [ ] Prompt template grounded on org data
-- [ ] Apex tests for the service layer and wrappers
+- [x] Apex tests for the service layer and wrappers (28 tests with the seed tests)
+- [ ] Deploy the Apex actions (after approval)
 - [ ] Agent Script: system block, subagents (orders, stock, returns), instructions, actions
 - [ ] Validate and preview locally, then publish and activate (after approval)
 - [ ] Agent tests (`AiEvaluationDefinition` / Testing Center)
