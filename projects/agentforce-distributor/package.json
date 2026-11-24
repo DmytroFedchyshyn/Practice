@@ -8,13 +8,13 @@
   "scripts": {
     "format": "prettier --write \"force-app/distributor/**/*.{cls,trigger,js,html,css}\"",
     "format:check": "prettier --check \"force-app/distributor/**/*.{cls,trigger,js,html,css}\"",
-    "lint": "eslint \"force-app/distributor/**/{aura,lwc}/**/*.js\" --no-warn-ignored",
+    "lint": "eslint \"force-app/distributor/**/{aura,lwc}/**/*.js\" --no-warn-ignored --no-error-on-unmatched-pattern",
     "scan": "mkdir -p reports && sf code-analyzer run --workspace force-app/distributor --rule-selector Recommended --rule-selector pmd:Security --output-file reports/code-analyzer.html",
     "scan:org": "mkdir -p reports && sf code-analyzer run --workspace force-app/main/default --rule-selector Recommended --rule-selector pmd:Security --output-file reports/code-analyzer-org.html",
     "secrets": "gitleaks git --redact --no-banner --verbose",
-    "test": "sfdx-lwc-jest",
+    "test": "sfdx-lwc-jest -- --passWithNoTests",
     "test:coverage": "sfdx-lwc-jest --coverage",
-    "test:ci": "sfdx-lwc-jest -- --ci --reporters=default --reporters=jest-junit",
+    "test:ci": "sfdx-lwc-jest -- --ci --passWithNoTests --reporters=default --reporters=jest-junit",
     "prepare": "git config core.hooksPath .githooks && chmod +x .githooks/* || true"
   },
   "lint-staged": {

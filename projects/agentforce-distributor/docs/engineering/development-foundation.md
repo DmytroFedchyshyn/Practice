@@ -340,6 +340,16 @@ call the same scripts in `tools/ci/`.
   (§2.3). Run `npm run format` over `force-app/distributor` in its own merge request, so the formatting job starts green.
   Scan the history of the default branch for secrets once: `npm run secrets`.
 
+  **First run — 2026-11-24, pull request #1.** Prettier, gitleaks and the secrets job passed. ESLint and Jest
+  failed only because the build had no Lightning web component yet; `npm run lint` now passes with
+  `--no-error-on-unmatched-pattern` and the Jest scripts with `--passWithNoTests`. Code Analyzer: 105 findings
+  in 18 files — 26 High, all `pmd:ApexCRUDViolation` in `SeedData`, fixed by naming system mode on each query
+  and write with the reason in the class header; 39 Moderate, left as the baseline: 14
+  `regex:DmlOnlyThroughDmlClass` (closed by `DstDml` in M4), 6 `pmd:CognitiveComplexity`, 5
+  `pmd:CyclomaticComplexity`, 5 `pmd:AvoidHardcodingId` (fake Ids in tests), 4 `pmd:ExcessiveParameterList`,
+  3 `pmd:NcssCount`, 1 `pmd:ProtectSensitiveData`, 1 `pmd:FieldNamingConventions`; 40 Low, all
+  `pmd:ApexUnitTestClassShouldHaveRunAs` on tests that run as the test user through a helper method.
+
 ---
 
 ## 2 · Code conventions

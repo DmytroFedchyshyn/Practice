@@ -57,3 +57,12 @@ A permission set description is at most 255 characters and a role description at
 ## Test data hides what the real org contains (2026-11-24)
 
 All tests passed, but the first run against the org showed the stock action's "too many matches" message listing 20 products: the Developer Edition ships 17 demo products (GenWatt generators, installation and SLA products) that the isolated test data never sees. Fixes: the message now lists at most five matches plus "and N more", and the demo products are deactivated (reactivate them by setting `IsActive = true` on products whose code does not start with `DST-`). Lesson: after deploying an agent action, run it once against real org data before trusting the tests.
+
+## The kit's first pipeline run on a project without components (2026-11-24)
+
+On pull request #1, ESLint and Jest failed because `force-app/distributor` had no Lightning web component:
+both treat "nothing to check" as an error. The project's scripts now pass on an empty set. Two more gaps for
+the kit: the Code Analyzer job log links each finding to `force-app/...` without the project's folder, so in a
+repository of several projects the links lead nowhere; and the kit's own `deploy-build.sh` is refused by
+Claude Code's auto mode, because the same script can deploy, so validations run as `sf project deploy validate`.
+

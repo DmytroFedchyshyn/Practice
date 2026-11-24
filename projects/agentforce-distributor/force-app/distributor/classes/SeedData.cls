@@ -8,6 +8,10 @@
  * partners are deleted and rebuilt so that their dates stay relative to today.
  *
  * All companies, people and numbers are invented.
+ *
+ * Every query and write runs in system mode, named on the statement: this is a data loader that an
+ * administrator runs from anonymous Apex, and tests run to build their data, not code that acts for a user.
+ * The user's own object and field access must not decide which demo records exist.
  */
 public with sharing class SeedData {
     @TestVisible
@@ -121,7 +125,7 @@ public with sharing class SeedData {
                 new Account(Partner_Code__c = row[0], Name = row[1], Partner_Tier__c = row[2], BillingCity = row[3])
             );
         }
-        upsert records Partner_Code__c;
+        upsert as system records Partner_Code__c;
 
         Map<String, Account> byCode = new Map<String, Account>();
         for (Account record : records) {
@@ -137,7 +141,7 @@ public with sharing class SeedData {
             emails.add(row[3]);
         }
         Map<String, Contact> existing = new Map<String, Contact>();
-        for (Contact record : [SELECT Id, Email FROM Contact WHERE Email IN :emails]) {
+        for (Contact record : [SELECT Id, Email FROM Contact WHERE Email IN :emails WITH SYSTEM_MODE]) {
             existing.put(record.Email, record);
         }
 
@@ -153,7 +157,7 @@ public with sharing class SeedData {
                 primaryByCode.put(row[0], record);
             }
         }
-        upsert records;
+        upsert as system records;
         return primaryByCode;
     }
 
@@ -163,6 +167,7 @@ public with sharing class SeedData {
             SELECT Id, ProductCode
             FROM Product2
             WHERE ProductCode LIKE :(PRODUCT_CODE_PREFIX + '%')
+            WITH SYSTEM_MODE
         ]) {
             byCode.put(record.ProductCode, record);
         }
@@ -174,7 +179,7 @@ public with sharing class SeedData {
             record.IsActive = true;
             byCode.put(code, record);
         }
-        upsert byCode.values();
+        upsert as system byCode.values();
         return byCode;
     }
 
@@ -187,12 +192,13 @@ public with sharing class SeedData {
             SELECT Id
             FROM Pricebook2
             WHERE Name = :PRICE_BOOK_NAME AND IsStandard = FALSE
+            WITH SYSTEM_MODE
             LIMIT 1
         ];
         Pricebook2 record = existing.isEmpty() ? new Pricebook2(Name = PRICE_BOOK_NAME) : existing[0];
         record.IsActive = true;
         record.Description = 'Partner prices for the distributor demo data.';
-        upsert record;
+        upsert as system record;
         return record.Id;
     }
 
@@ -204,7 +210,7 @@ public with sharing class SeedData {
     private static Map<Id, PricebookEntry> upsertPriceBookEntries(List<Product2> products, Id priceBookId) {
         Id standardId = Test.isRunningTest()
             ? Test.getStandardPricebookId()
-            : [SELECT Id FROM Pricebook2 WHERE IsStandard = TRUE LIMIT 1].Id;
+            : [SELECT Id FROM Pricebook2 WHERE IsStandard = TRUE WITH SYSTEM_MODE LIMIT 1].Id;
 
         Map<String, Decimal> priceByCode = new Map<String, Decimal>();
         for (List<Object> row : PRODUCT_ROWS) {
@@ -216,6 +222,7 @@ public with sharing class SeedData {
             SELECT Id, Product2Id, Pricebook2Id
             FROM PricebookEntry
             WHERE Product2Id IN :products AND Pricebook2Id IN (:standardId, :priceBookId)
+            WITH SYSTEM_MODE
         ]) {
             existing.put(entry.Pricebook2Id + ':' + entry.Product2Id, entry);
         }
@@ -233,7 +240,7 @@ public with sharing class SeedData {
                 records.add(entry);
             }
         }
-        upsert records;
+        upsert as system records;
 
         Map<Id, PricebookEntry> partnerEntries = new Map<Id, PricebookEntry>();
         for (PricebookEntry entry : records) {
@@ -249,7 +256,7 @@ public with sharing class SeedData {
         for (List<String> row : WAREHOUSE_ROWS) {
             records.add(new Warehouse__c(Code__c = row[0], Name = row[1], City__c = row[2], Is_Active__c = true));
         }
-        upsert records Code__c;
+        upsert as system records Code__c;
 
         Map<String, Warehouse__c> byCode = new Map<String, Warehouse__c>();
         for (Warehouse__c record : records) {
@@ -267,6 +274,7 @@ public with sharing class SeedData {
             SELECT Id, Stock_Key__c
             FROM Stock_Level__c
             WHERE Stock_Key__c LIKE :('%:' + PRODUCT_CODE_PREFIX + '%')
+            WITH SYSTEM_MODE
         ]) {
             existing.put(record.Stock_Key__c, record);
         }
@@ -292,15 +300,15 @@ public with sharing class SeedData {
                 records.add(record);
             }
         }
-        upsert records;
+        upsert as system records;
         return records;
     }
 
     /** Activated orders cannot be deleted, so they go back to Draft first. */
     private static void deleteTransactions(List<Account> accounts) {
-        delete [SELECT Id FROM Return_Request__c WHERE Account__c IN :accounts];
+        delete as system [SELECT Id FROM Return_Request__c WHERE Account__c IN :accounts WITH SYSTEM_MODE];
 
-        List<Order> orders = [SELECT Id, Status FROM Order WHERE AccountId IN :accounts];
+        List<Order> orders = [SELECT Id, Status FROM Order WHERE AccountId IN :accounts WITH SYSTEM_MODE];
         List<Order> activated = new List<Order>();
         for (Order record : orders) {
             if (record.Status == 'Activated') {
@@ -308,8 +316,8 @@ public with sharing class SeedData {
                 activated.add(record);
             }
         }
-        update activated;
-        delete orders;
+        update as system activated;
+        delete as system orders;
     }
 
     /** @return orders per partner code, in the same order as ORDER_SHAPES */
@@ -354,7 +362,7 @@ public with sharing class SeedData {
             byPartner.put(partnerCode, partnerOrders);
             orders.addAll(partnerOrders);
         }
-        insert orders;
+        insert as system orders;
 
         // Two lines per order, spread over the catalogue so partners differ.
         List<OrderItem> items = new List<OrderItem>();
@@ -367,7 +375,7 @@ public with sharing class SeedData {
                 items.add(newItem(partnerOrders[s], entries.get(second.Id), 2 + p));
             }
         }
-        insert items;
+        insert as system items;
 
         // An order can only be activated once it has products. Cancelled orders stay in Draft.
         List<Order> toActivate = new List<Order>();
@@ -376,7 +384,7 @@ public with sharing class SeedData {
                 toActivate.add(new Order(Id = record.Id, Status = 'Activated'));
             }
         }
-        update toActivate;
+        update as system toActivate;
         return byPartner;
     }
 
@@ -404,6 +412,7 @@ public with sharing class SeedData {
             SELECT OrderId, Product2Id
             FROM OrderItem
             WHERE OrderId IN :orderIds
+            WITH SYSTEM_MODE
             ORDER BY OrderItemNumber DESC
         ]) {
             firstProductByOrder.put(item.OrderId, item.Product2Id);
@@ -427,7 +436,7 @@ public with sharing class SeedData {
                 )
             );
         }
-        insert records;
+        insert as system records;
         return records;
     }
 }
