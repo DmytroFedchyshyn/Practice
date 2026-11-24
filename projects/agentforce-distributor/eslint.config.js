@@ -9,8 +9,17 @@ const globals = require("globals");
 const { buildDir, snapshotDir } = require("./project.config.json");
 
 module.exports = defineConfig([
-    // Only the build's own code is linted: the org snapshot and third-party code keep their authors' style.
-    { ignores: [`${snapshotDir}/**`, `${buildDir}/vendor/**`, "node_modules/**", ".sf/**", ".sfdx/**"] },
+    // Only the build's own code is linted: the org snapshot (a practice project has none) and third-party
+    // code keep their authors' style.
+    {
+        ignores: [
+            ...(snapshotDir ? [`${snapshotDir}/**`] : []),
+            `${buildDir}/vendor/**`,
+            "node_modules/**",
+            ".sf/**",
+            ".sfdx/**"
+        ]
+    },
 
     {
         files: ["**/aura/**/*.js"],

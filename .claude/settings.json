@@ -1,16 +1,5 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "extraKnownMarketplaces": {
-    "project-plugins": {
-      "source": {
-        "source": "local",
-        "path": "./.claude/plugins"
-      }
-    }
-  },
-  "enabledPlugins": {
-    "sf-project-flow@project-plugins": true
-  },
   "hooks": {
     "PreToolUse": [
       {

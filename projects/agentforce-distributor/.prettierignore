@@ -1,8 +1,6 @@
-# Prettier formats only the build's own code in force-app/distributor (docs/engineering/development-foundation.md §1.5).
-# The org snapshot keeps the org's formatting, so a retrieve still diffs cleanly.
-force-app/main/default/
+# Prettier formats only the project's own code in force-app/distributor.
 docs/
 reports/
 **/*.xml
-# Third-party code stays as its authors published it, so an upgrade is a plain copy (docs/engineering/architecture.md §5)
+# Third-party code stays as its authors published it, so an upgrade is a plain copy
 force-app/distributor/vendor/

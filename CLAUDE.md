@@ -38,5 +38,5 @@ instructions instead of doing them silently.
 ## Base
 
 New projects are created from the owner's Salesforce delivery kit (a private repository, copied in by
-its `init.sh`). Its rules, architecture and tooling come with the project; improvements found here are
-offered back to the kit in project-neutral form.
+its `init.sh`), with its practice profile: the project's `CLAUDE.md`, its `docs/rules.md` and the kit's
+tooling come with it. Improvements found here are offered back to the kit in project-neutral form.

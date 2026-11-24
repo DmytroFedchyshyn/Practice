@@ -1,6 +1,6 @@
 /**
  * Every write of the build goes through this interface, so a unit test can replace it with DstDmlFake
- * (development-foundation.md §3 F-9). An ...All method saves every record or none and throws
+ * (the delivery kit's write layer). An ...All method saves every record or none and throws
  * DstDmlException; an ...Each method saves what it can and returns one result per record, in order.
  * An operation is added when a story first needs it.
  */

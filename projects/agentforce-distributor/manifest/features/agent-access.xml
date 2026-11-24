@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Feature Agent access: generated from project.config.json by tools/feature-manifests.py; do not edit. -->
-<Package xmlns="http://soap.sforce.com/2006/04/metadata">
-    <types>
-        <members>Distributor_Agent_Access</members>
-        <name>PermissionSet</name>
-    </types>
-    <version>68.0</version>
-</Package>
