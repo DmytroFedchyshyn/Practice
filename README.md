@@ -66,7 +66,7 @@ A fictional distributor runs a partner portal on Experience Cloud. A logged-in p
 `agentforce` is the default package directory, so metadata retrieved from an org that is new to the project lands in `agentforce/main/default`; move it into its feature folder. Agentforce needs an org with Agentforce and Data Cloud enabled (for example an Agentforce Developer Edition):
 
 ```bash
-sf project retrieve start --metadata Bot GenAiPlannerBundle GenAiPlugin GenAiFunction --target-org practice
+sf project retrieve start --metadata AiAuthoringBundle --target-org practice
 ```
 
 Formatting uses Prettier with the Apex plugin: `npm install`, then `npm run prettier`.
