@@ -17,14 +17,17 @@ A hands-on reference build in a Developer Edition org with Agentforce and Data 3
 
 ## Phase 1: Data model and test data
 
-- [ ] Decide: standard `Order` / `Product2` versus custom objects for orders and stock
-- [ ] Partner accounts and contacts
-- [ ] Orders and order lines
-- [ ] Products and stock levels
-- [ ] Custom request object (partner request / claim)
-- [ ] Permission set for the data model
-- [ ] Repeatable seed script for test data
-- [ ] Deploy and load data (after approval)
+- [x] Decide: standard `Order` / `OrderItem` / `Product2` with custom fields
+- [x] Decide: stock lives in both CRM (`Stock_Level__c` snapshot) and Data Cloud (ERP feed, phase 3)
+- [x] Decide: the request is a return / claim (`Return_Request__c`)
+- [x] Decide: seed data through an idempotent Apex script
+- [x] Metadata: `Warehouse__c`, `Stock_Level__c`, `Return_Request__c`, custom fields on `Order` and `Account`, tabs
+- [x] Permission set `Distributor_Data_Admin`
+- [x] Check-only deploy passes
+- [ ] Deploy the data model (after approval)
+- [ ] Seed script: partner accounts and contacts, products and price book entries, warehouses and stock, orders in every fulfillment status, return requests
+- [ ] Apex test for the seed script
+- [ ] Load data (after approval)
 
 ## Phase 2: Agentforce
 

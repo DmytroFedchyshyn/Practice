@@ -9,12 +9,22 @@ Decisions, pitfalls, and open questions, logged as they happen. Raw material for
 | 2026-11-24 | Build in this repo, in the `agentforce/` package directory                                   | The directory already exists and is empty; one repo keeps all practice work together |
 | 2026-11-24 | Scenario: fictional distributor with a partner portal (orders, stock, requests)              | Covers data access, actions, Data Cloud grounding, and per-account security          |
 | 2026-11-24 | Docs live in `docs/agentforce/`, seed data and scripts in `agentforce/data` and `/scripts`   | Keeps non-metadata out of `main/default`; both folders are in `.forceignore`         |
+| 2026-11-24 | Standard `Order` / `OrderItem` / `Product2`; logistics state in custom `Fulfillment_Status__c` | Realistic, maps to standard DMOs; standard `Status` only has Draft and Activated |
+| 2026-11-24 | Stock in both places: `Stock_Level__c` snapshot in CRM and an ERP feed in Data Cloud | Lets the agent answer in phase 2 and lets us compare SOQL access with Data Cloud access |
+| 2026-11-24 | The request is a return / claim: `Return_Request__c` linked to order, product and account | Gives real validation rules for the Apex action and a reason for a returns-policy PDF |
+| 2026-11-24 | `Return_Request__c` uses lookups to `Account` and `Order`, not master-detail; sharing is Private | Keeps the sharing design open for phase 4, where we decide how a partner gets access |
+| 2026-11-24 | External ids on `Account`, `Warehouse__c`, `Stock_Level__c` | Idempotent seed upserts now, join keys for the ERP feed in Data Cloud later |
+| 2026-11-24 | Seed data through an Apex script | Idempotent, dates relative to today, handles price book entries and order activation |
 
 ## Pitfalls
 
 ### Salesforce CLI fails silently on Node 20 (2026-11-24)
 
 `sf` 2.159 requires Node 22 or later. On Node 20 every org command crashed inside `undici` (`createZstdDecompress` is undefined) and wrote nothing to stdout, so `sf ... --json | jq` looked like an empty result rather than an error. Fix: switch the default Node to 22+. Lesson: when a CLI pipeline returns nothing, look at stderr before debugging the query.
+
+### Product2 rejects required lookups (2026-11-24)
+
+A custom lookup to `Product2` with `required=true` (delete constraint Restrict) fails with "Cannot add a lookup relationship child with cascade or restrict options to Product2". The check-only deploy caught it. Fix: optional lookup with `SetNull` plus a validation rule (`Product_Required`). Side effect: the field is no longer universally required, so it needs explicit field-level security in permission sets.
 
 ## Phase 0 findings (Developer Edition, API 68.0)
 

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Return Request</label>
+    <pluralLabel>Return Requests</pluralLabel>
+    <description>A partner's request to return or claim against a delivered order line.</description>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <sharingModel>Private</sharingModel>
+    <externalSharingModel>Private</externalSharingModel>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableActivities>false</enableActivities>
+    <enableHistory>false</enableHistory>
+    <enableBulkApi>true</enableBulkApi>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <startsWith>Consonant</startsWith>
+    <nameField>
+        <label>Return Request Number</label>
+        <type>AutoNumber</type>
+        <displayFormat>RR-{00000}</displayFormat>
+    </nameField>
+</CustomObject>
