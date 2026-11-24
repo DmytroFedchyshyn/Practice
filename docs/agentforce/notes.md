@@ -23,6 +23,7 @@ Decisions, pitfalls, and open questions, logged as they happen. Raw material for
 | 2026-11-24 | Return policy in code: delivered, within 30 days, product on the order, quantity not above ordered minus open requests | Deterministic rules belong in Apex, not in prompt instructions |
 | 2026-11-24 | Feature folders inside the one `agentforce` package directory, not one package directory per feature | Features share objects and permission sets; nothing is packaged yet |
 | 2026-11-24 | Layers as plain classes (`actions`, `services`, `domain`, `selectors`), no fflib | Same separation without a library dependency; fflib can be a separate exercise |
+| 2026-11-24 | Deactivated the 17 Developer Edition demo products (`IsActive = false`, not deleted) | The catalogue should be the distributor's; stock search only looks at active products |
 
 ## Pitfalls
 
@@ -56,7 +57,7 @@ The bulk test for return requests failed with "Too many SOQL queries: 101" altho
 
 ### Test data hides what the real org contains (2026-11-24)
 
-All tests passed, but the first run against the org showed the stock action's "too many matches" message listing 20 products: the Developer Edition ships 17 demo products (GenWatt generators, installation and SLA products) that the isolated test data never sees. Fixes: the message now lists at most five matches plus "and N more". Lesson: after deploying an agent action, run it once against real org data before trusting the tests.
+All tests passed, but the first run against the org showed the stock action's "too many matches" message listing 20 products: the Developer Edition ships 17 demo products (GenWatt generators, installation and SLA products) that the isolated test data never sees. Fixes: the message now lists at most five matches plus "and N more", and the demo products are deactivated (reactivate them by setting `IsActive = true` on products whose code does not start with `DST-`). Lesson: after deploying an agent action, run it once against real org data before trusting the tests.
 
 ## Phase 0 findings (Developer Edition, API 68.0)
 
