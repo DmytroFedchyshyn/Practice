@@ -1,0 +1,12 @@
+{
+  "packageDirectories": [
+    {
+      "path": "agentforce",
+      "default": true
+    }
+  ],
+  "name": "agentforce-distributor",
+  "namespace": "",
+  "sfdcLoginUrl": "https://login.salesforce.com",
+  "sourceApiVersion": "68.0"
+}
