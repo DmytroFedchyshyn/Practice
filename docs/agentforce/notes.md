@@ -48,19 +48,9 @@ The seed class had a constant `PRODUCTS` and a method parameter `products`. In A
 - `sf agent test` and `AiEvaluationDefinition` are documented as the pro-code side of the legacy Testing Center; a new Testing Center in Agentforce Studio is in beta and its pro-code docs are not out yet.
 - `developer.salesforce.com` refuses scripted fetches (HTTP 403). The docs pages have Markdown twins (`.md` instead of `.html`) that load fine in a browser.
 
-## Research: how Salesforce wants agents built (2026-11-24)
+## Research
 
-Sources are listed under References. Third-party blogs were used only for dates and are marked as such.
-
-- **Agent Script is the default.** The new Agentforce Builder (GA Spring '26) is built on Agent Script; Canvas view, Script view and chat-to-build all edit the same `.agent` file. The DX guide labels building without Agent Script as legacy and recommends against it.
-- **Legacy builder is closed for new agents.** Existing legacy agents keep running but cannot be edited in the new builder; they must be upgraded (there is an Agent Migration Guide in Help). Third-party blogs date the removal of "New Agent" in the legacy builder to mid-July 2026.
-- **Topics are now subagents** (April 2026). Same functionality, new name; docs mix both terms.
-- **Lifecycle: draft, commit, activate.** The `.agent` file in an `AiAuthoringBundle` is a draft. Publishing (`sf agent publish authoring-bundle`, or Commit Version in the builder) compiles it into runtime metadata and creates a new immutable version. `sf agent activate` makes a version live. Only drafts can be published.
-- **Runtime metadata depends on the API version.** v66-v67: `Bot`, `BotVersion`, `GenAiPlannerBundle` with local subagents and actions. v68 (Winter '27, this org): `AiAgentDefinition` and `AiAgentDefinitionVersion`; `GenAiPlannerBundle` is gone and `Bot` is for Einstein Bots only. Moving v68 agents needs both orgs on v68, and the agent version pulls in its Apex, Flow and prompt template dependencies automatically.
-- **What goes into Git.** Salesforce suggests keeping the `AiAuthoringBundle` as the source of truth and publishing after deploy (deploy, publish, activate). Committing the generated runtime metadata as well gives a deploy that is live without a publish step, at the cost of noisy generated files in the repo.
-- **Local assets.** A subagent or action added from the library is copied into the agent version, so later changes to the library asset do not reach the agent. In Agent Script, actions are declared per subagent with `target: "apex://..."`, `"flow://..."` or `"prompt://..."`.
-- **Testing is in transition.** `sf agent test` with `AiEvaluationDefinition` is the pro-code side of the legacy Testing Center. A new Testing Center in Agentforce Studio is in beta, and its pro-code docs are "coming soon".
-- **Considerations worth remembering.** Every action run is billable, deterministic or not; utilities (transitions, set variables, escalation) are not. Some features exist only in Script view. Canvas view can break on invalid script and comes back once the script compiles.
+- [How agents are built](research-agent-authoring.md): editors, lifecycle, v68 metadata, Agent Script essentials, testing.
 
 ## Open questions
 
@@ -75,13 +65,3 @@ Sources are listed under References. Third-party blogs were used only for dates 
 - [Data 360 Limits and Guidelines](https://help.salesforce.com/s/articleView?language=en_US&id=sf.c360_a_limits_and_guidelines.htm)
 - [Agent Metadata](https://developer.salesforce.com/docs/ai/agentforce/guide/agent-dx-metadata.html)
 - [The New Agentforce Metadata and Development Lifecycle](https://developer.salesforce.com/blogs/2026/05/new-agentforce-metadata-and-development-lifecycle)
-- [Get Started with Agent Script](https://developer.salesforce.com/docs/ai/agentforce/guide/agent-script.html)
-- [Agent Script Reference: Actions](https://developer.salesforce.com/docs/ai/agentforce/guide/ascript-ref-actions.html)
-- [Author an Agent with Agentforce DX](https://developer.salesforce.com/docs/ai/agentforce/guide/agent-dx-nga-author-agent.html)
-- [Publish an Agent](https://developer.salesforce.com/docs/ai/agentforce/guide/agent-dx-nga-publish.html)
-- [Agentforce Metadata Types (v68 and Later)](https://developer.salesforce.com/docs/ai/agentforce/references/agents-metadata-tooling/agents-metadata.html)
-- [Move an Agent to a New Org](https://developer.salesforce.com/docs/ai/agentforce/guide/agent-dx-deploy-metadata.html)
-- [Test an Agent with Agentforce DX](https://developer.salesforce.com/docs/ai/agentforce/guide/agent-dx-test.html)
-- [Build Enterprise-Ready Agents with the New Agentforce Builder](https://help.salesforce.com/s/articleView?id=ai.agent_builder_intro.htm&type=5)
-- [Agentforce Builder Considerations](https://help.salesforce.com/s/articleView?id=ai.agent_considerations.htm&type=5)
-- Third party, dates only: [Salesforce Diary](https://www.salesforcediary.com/stop-describing-your-agent-start-declaring-it/), [Conclo Technologies](https://conclotechnologies.com/the-legacy-builder-is-no-longer-used-for-creating-new-agents/)

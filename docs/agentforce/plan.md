@@ -36,7 +36,7 @@ A hands-on reference build in a Developer Edition org with Agentforce and Data 3
 - [x] Decide: Service agent from the start, with a dedicated agent user
 - [x] Decide: the partner account comes from a session variable in phase 2; the portal sets it from the logged-in user in phase 4
 - [x] Decide: "list my return requests" is the Flow action, the rest are Apex
-- [ ] Decide: Agent Script authoring bundle and what goes into Git (see research in notes)
+- [ ] Decide: Agent Script authoring bundle and what goes into Git (see [research](research-agent-authoring.md))
 - [ ] Agent user, created by hand in Setup, plus a permission set for it in the repo
 - [ ] Apex service layer and invocable wrappers: order status, stock availability, create return request
 - [ ] Flow action: list the partner's return requests
