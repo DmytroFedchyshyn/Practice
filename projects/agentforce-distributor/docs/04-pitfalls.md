@@ -159,10 +159,18 @@ portal knows the partner's contact.
 
 ## Testing Center's Simulate Mode writes to the org (2026-11-25)
 
-The new Testing Center (Agentforce Studio, Beta; in this org it opens from Setup → Testing Center) offers two data
-access modes, named Live Mode and Simulate Mode in the UI (Live Data and Mocked Data in the help). The help describes
-the simulated mode as an isolated environment that does not affect the org. Three turn-level tests in Simulate Mode
-show otherwise:
+There are two Testing Centers, and both offer a data access mode, Live Mode or Simulate Mode (Live Data and Mocked
+Data in the help):
+
+- **Legacy**: Setup → Einstein Generative AI → Agentforce Studio → Testing Center. Turn-level tests only, stored as
+  `AiEvaluationDefinition`. The five suites below were made here; at first they were taken for the new one, because
+  the dialog looks the same (Details, Conditions, Data, Scorers).
+- **New (Beta)**: the Agentforce Studio app → Tests (`/lightning/app/standard__AgentforceStudio`). Asks for the test
+  suite type, Conversation-Level or Turn-Level; context variables are set on the Data step. Its suites did not show
+  up as `AiTestingDefinition` in a metadata listing.
+
+The help describes the simulated mode as an isolated environment that does not affect the org. Turn-level tests in
+the legacy Testing Center, Simulate Mode, show otherwise:
 
 - "How many cordless drills do you have?" called `check_product_stock` and answered with the org's own figures
   (285: 210 and 75 by warehouse): the Apex action ran against real data.
@@ -174,9 +182,22 @@ show otherwise:
   delivered, ran `ReturnPolicy` on the real order and was refused.
 
 So Simulate Mode isolates neither reads nor writes of the agent's own Apex actions. The help also speaks of
-external services; this agent calls none, so that part was not tested. Run tests that write only in a sandbox or a scratch org, or against data the
-seed script restores.
+external services; this agent calls none, so that part was not tested. Run tests that write only in a sandbox or a
+scratch org, or against data the seed script restores.
 
-Two other findings from the same tests: the agent's `partner_account_id` (an Agent Script variable with
-`visibility: "External"`) is offered as a context variable beside the messaging session's standard ones, and only
-committed agent versions can be tested.
+How version 2, which asks before it creates a return request, passes:
+
+- **Turn-level, "asks first"**: the utterance asks for the return, Expected Actions `[]`, Expected Response the
+  confirmation question. All three scorers passed. This is the test that fails if the confirmation is ever removed.
+- **Conversation-level, Live** (new Testing Center): the scenario tells the simulated partner to give the details and
+  to confirm when asked. The conversation took three turns, the partner answered "Yes, please proceed.", and the agent
+  created `RR-00004`. Subagent and Task Resolution passed; Actions Evaluation failed only on format: the
+  conversation-level Expected Actions column takes the plain action name (`create_return_request`), and a
+  Python-style list (`['create_return_request']`, the turn-level format) is read as one nested item.
+
+The help's advice on Expected Response holds: write the response you expect, not an instruction about it ("The agent
+confirms that…"), or the LLM judge scores less accurately.
+
+Two other findings: the agent's `partner_account_id` (an Agent Script variable with `visibility: "External"`) is
+offered as a context variable beside the messaging session's standard ones, and only committed agent versions can be
+tested.
