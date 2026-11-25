@@ -23,6 +23,10 @@ never go here: the repository is public.
 
 - The Developer Edition's 17 demo products (GenWatt, Installation, SLA) are inactive (`IsActive = false`), not
   deleted (decision D-36).
+- Return request `RR-00003` (order 00000109, Anchor Bolts M10, Submitted) was created by a Testing Center run in
+  Simulate Mode, as the agent user. The seed script rebuilds the demo data without it.
+- Partner Service Agent has a committed version 3 that creates return requests without asking for confirmation. It
+  exists only for the Testing Center experiment and must never be activated; version 2 is the active one (D-48).
 
 ## Findings at the start (phase 0)
 

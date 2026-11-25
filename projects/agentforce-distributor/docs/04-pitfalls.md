@@ -157,16 +157,25 @@ declare `contactId`. They are optional; the agent works without them. `contactId
 portal knows the partner's contact.
 
 
-## Testing Center's Simulate Mode still runs the agent's actions on org data (2026-11-25)
+## Testing Center's Simulate Mode writes to the org (2026-11-25)
 
 The new Testing Center (Agentforce Studio, Beta; in this org it opens from Setup → Testing Center) offers two data
 access modes, named Live Mode and Simulate Mode in the UI (Live Data and Mocked Data in the help). The help describes
-the simulated mode as an isolated environment that does not affect the org. A turn-level test in Simulate Mode, "How
-many cordless drills do you have?", called `check_product_stock` and answered with the org's own figures (285: 210
-and 75 by warehouse), so the Apex action ran against real data. Whether a writing action is isolated is not settled:
-a turn-level test cannot get past `require_user_confirmation`, because a confirmation written into the conversation
-history is only text and the agent asks again (Actual Actions `[]`, no record created). Treat both modes as able to
-write until a test shows otherwise.
+the simulated mode as an isolated environment that does not affect the org. Three turn-level tests in Simulate Mode
+show otherwise:
+
+- "How many cordless drills do you have?" called `check_product_stock` and answered with the org's own figures
+  (285: 210 and 75 by warehouse): the Apex action ran against real data.
+- A test cannot get past `require_user_confirmation`: a confirmation written into the conversation history is only
+  text, so the agent asks again (Actual Actions `[]`).
+- With version 3 of the agent, committed only for this experiment with `require_user_confirmation: False` on
+  `create_return_request`, a request for 1 Anchor Bolts M10 from order 00000109 created `RR-00003` in the org, as the
+  agent user, and the record stayed (`ALL ROWS` shows it not deleted). The first attempt, on an order not yet
+  delivered, ran `ReturnPolicy` on the real order and was refused.
+
+So Simulate Mode isolates neither reads nor writes of the agent's own Apex actions. The help also speaks of
+external services; this agent calls none, so that part was not tested. Run tests that write only in a sandbox or a scratch org, or against data the
+seed script restores.
 
 Two other findings from the same tests: the agent's `partner_account_id` (an Agent Script variable with
 `visibility: "External"`) is offered as a context variable beside the messaging session's standard ones, and only
