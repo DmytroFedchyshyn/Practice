@@ -12,11 +12,11 @@ it goes here with an owner. A question that closes moves to *Closed*, with its a
 | ID | Question | Owner | Raised | Detail |
 |---|---|---|---|---|
 | OQ-1 | Agent identity on the site | Developer (this project) | 2026-11-24 | One help page says credential-based user verification makes a Service agent on an Experience Cloud site run as the logged-in site user. Another says user verification is supported only on an external website and a few Aura templates (Build Your Own Aura, Help Center, Customer Service). Resolve before phase 4: it drives the template choice and how we prove a partner sees only their own account. |
-| OQ-2 | Record collections as Flow action outputs | Developer (this project) | 2026-11-24 | The Agent Script reference allows `list[object]` outputs with a `complex_data_type_name` ([Actions](https://developer.salesforce.com/docs/ai/agentforce/guide/ascript-ref-actions.html)). The help page [Agentforce Considerations](https://help.salesforce.com/s/articleView?id=ai.copilot_considerations.htm&language=en_US&type=5) says custom actions on Apex or Flow support only primitive types and that a flow with a collection resource cannot be used. `List_Return_Requests` tests this; check it when the action is added to the agent. |
-| OQ-3 | Prompt template action target | Developer (this project) | 2026-11-24 | The Agent Script reference lists `prompt://<Template>`; the [PromptTemplateActions recipe](https://developer.salesforce.com/sample-apps/agent-script-recipes/action-configuration/prompt-template-actions) uses `generatePromptResponse://<Template>` with inputs named `"Input:<apiName>"` and the output `promptResponse`. Check with `sf agent validate`. |
 
 ## Closed
 
 | ID | Question | Answer | Closed |
 |---|---|---|---|
+| OQ-2 | Record collections as Flow action outputs | Yes: `List_Return_Requests` returns `returnRequests` as `list[object]` with `complex_data_type_name: "lightning__recordInfoType"`, and the agent read the records in the live test (2026-11-25) | 2026-11-25 |
+| OQ-3 | Prompt template action target | `generatePromptResponse://Explain_Return_Request`, with inputs `"Input:requestNumber"` and `"Input:accountId"` and the output `promptResponse`, works in the live test (2026-11-25) | 2026-11-25 |
 | OQ-4 | The technical design | Not needed: the practice profile does not ask for one (D-43); the build plan and the decisions log describe the build | 2026-11-24 |
