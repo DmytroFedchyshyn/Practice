@@ -185,6 +185,14 @@ So Simulate Mode isolates neither reads nor writes of the agent's own Apex actio
 external services; this agent calls none, so that part was not tested. Run tests that write only in a sandbox or a
 scratch org, or against data the seed script restores.
 
+The new Testing Center behaves differently. A conversation-level suite there, Simulate Mode, version 2, the same
+scenario as the Live run below: the simulated partner confirmed, `create_return_request` was called (Actual Actions
+`["create_return_request"]`, all three scorers passed), and the agent answered "Request number: RR-00057". No record
+was written: the org still holds `RR-00000` to `RR-00002` (`ALL ROWS`, only the deleted `RR-00003` and `RR-00004`
+beside them), and the next real number would have been `RR-00005`. The action's output was simulated. Two things
+differ from the legacy run, the Testing Center and the test type (conversation-level, not turn-level), so this does
+not tell which of the two makes the difference. Whether reads are simulated too was not checked.
+
 How version 2, which asks before it creates a return request, passes:
 
 - **Turn-level, "asks first"**: the utterance asks for the return, Expected Actions `[]`, Expected Response the
