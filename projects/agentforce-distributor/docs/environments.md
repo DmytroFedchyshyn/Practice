@@ -25,9 +25,9 @@ never go here: the repository is public.
   deleted (decision D-36).
 - Testing Center experiments created return requests `RR-00003` (legacy Testing Center, Simulate Mode, version 3) and
   `RR-00004` (new Testing Center, conversation-level, Live Mode, version 2); both were deleted afterwards (recycle bin).
-- Testing Center suites: five in the legacy Testing Center (`AiEvaluationDefinition`, Setup) and two in the new one
-  (Agentforce Studio → Tests, a Live and a Simulate conversation suite), all from the experiments recorded in the
-  pitfalls.
+- Testing Center suites: five in the legacy Testing Center (`AiEvaluationDefinition`, Setup) and three in the new one
+  (Agentforce Studio → Tests: a Live and a Simulate conversation suite, a Simulate turn-level suite on version 3), all
+  from the experiments recorded in the pitfalls.
 - Partner Service Agent has a committed version 3 that creates return requests without asking for confirmation. It
   exists only for the Testing Center experiment and must never be activated; version 2 is the active one (D-48).
 

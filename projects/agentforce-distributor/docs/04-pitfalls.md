@@ -157,7 +157,7 @@ declare `contactId`. They are optional; the agent works without them. `contactId
 portal knows the partner's contact.
 
 
-## Testing Center's Simulate Mode writes to the org (2026-11-25)
+## The legacy Testing Center's Simulate Mode writes to the org (2026-11-25)
 
 There are two Testing Centers, and both offer a data access mode, Live Mode or Simulate Mode (Live Data and Mocked
 Data in the help):
@@ -181,17 +181,25 @@ the legacy Testing Center, Simulate Mode, show otherwise:
   agent user, and the record stayed (`ALL ROWS` shows it not deleted). The first attempt, on an order not yet
   delivered, ran `ReturnPolicy` on the real order and was refused.
 
-So Simulate Mode isolates neither reads nor writes of the agent's own Apex actions. The help also speaks of
+So the legacy Testing Center's Simulate Mode isolates neither reads nor writes of the agent's own Apex actions. The help also speaks of
 external services; this agent calls none, so that part was not tested. Run tests that write only in a sandbox or a
 scratch org, or against data the seed script restores.
 
-The new Testing Center behaves differently. A conversation-level suite there, Simulate Mode, version 2, the same
-scenario as the Live run below: the simulated partner confirmed, `create_return_request` was called (Actual Actions
-`["create_return_request"]`, all three scorers passed), and the agent answered "Request number: RR-00057". No record
-was written: the org still holds `RR-00000` to `RR-00002` (`ALL ROWS`, only the deleted `RR-00003` and `RR-00004`
-beside them), and the next real number would have been `RR-00005`. The action's output was simulated. Two things
-differ from the legacy run, the Testing Center and the test type (conversation-level, not turn-level), so this does
-not tell which of the two makes the difference. Whether reads are simulated too was not checked.
+The new Testing Center does what the help says: Simulate Mode there does not run the actions, the LLM makes up
+their output.
+
+- Conversation-level, version 2, the same scenario as the Live run below: the simulated partner confirmed,
+  `create_return_request` was called (all three scorers passed), and the agent answered "Request number: RR-00057".
+- Turn-level, version 3, the same two utterances as in the legacy Testing Center: the return request "was created"
+  as `RR-00053`, and the stock question got "24 cordless drills: Warehouse A 10, Warehouse B 8, Warehouse C 6".
+  The org has two warehouses, Central (210) and West (75); Response Assertion failed on that row, which is how the
+  made-up figures showed.
+- No record was written in either run: `ALL ROWS` shows only `RR-00000` to `RR-00002` and the deleted `RR-00003`
+  and `RR-00004`; the next real number would have been `RR-00005`.
+
+Same version, same utterances, same test type: the difference is the Testing Center, not the test type. The flip
+side: a Simulate test in the new Testing Center checks only that the agent picks the right subagent and action; a
+Response Assertion against real data fails there by design, so test the answers in Live Mode.
 
 How version 2, which asks before it creates a return request, passes:
 
