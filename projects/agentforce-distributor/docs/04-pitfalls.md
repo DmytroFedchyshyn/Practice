@@ -156,3 +156,18 @@ inputs `isPreviewOnly` and `outputLanguage` or its output `generationId`, and th
 declare `contactId`. They are optional; the agent works without them. `contactId` comes back in phase 4, when the
 portal knows the partner's contact.
 
+
+## Testing Center's Simulate Mode still runs the agent's actions on org data (2026-11-25)
+
+The new Testing Center (Agentforce Studio, Beta; in this org it opens from Setup → Testing Center) offers two data
+access modes, named Live Mode and Simulate Mode in the UI (Live Data and Mocked Data in the help). The help describes
+the simulated mode as an isolated environment that does not affect the org. A turn-level test in Simulate Mode, "How
+many cordless drills do you have?", called `check_product_stock` and answered with the org's own figures (285: 210
+and 75 by warehouse), so the Apex action ran against real data. Whether a writing action is isolated is not settled:
+a turn-level test cannot get past `require_user_confirmation`, because a confirmation written into the conversation
+history is only text and the agent asks again (Actual Actions `[]`, no record created). Treat both modes as able to
+write until a test shows otherwise.
+
+Two other findings from the same tests: the agent's `partner_account_id` (an Agent Script variable with
+`visibility: "External"`) is offered as a context variable beside the messaging session's standard ones, and only
+committed agent versions can be tested.
