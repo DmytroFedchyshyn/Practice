@@ -42,14 +42,14 @@ A hands-on reference build in a Developer Edition org with Agentforce and Data 3
 - [x] Second agent user, created with `sf org create agent-user`, to compare the two ways (role and `Distributor_Agent_Access` assigned afterwards; same record access as the first)
 - [x] Apex service layer and invocable wrappers: order status, stock availability, create return request (validated, not deployed)
 - [x] Flow action: list the partner's return requests (`List_Return_Requests`, record collection output, Apex test; deployed and smoke-tested)
-- [ ] Confirm in the agent that a record collection works as a Flow action output; if not, switch to a text output
+- [x] Confirm in the agent that a record collection works as a Flow action output (it does, OQ-2)
 - [x] Apex grounding for the prompt template: `GetReturnRequestFactsAction` with service, selector and domain rules (26 returns tests, validated, not deployed)
 - [x] Flex prompt template `Explain_Return_Request`, built by hand in Prompt Builder, previewed on three cases, activated and retrieved into the repo
 - [x] Apex tests for the service layer and wrappers (28 tests with the seed tests)
 - [x] Reorganize into feature folders with selector and domain layers (40 tests, validated)
 - [x] Deploy the Apex actions (61 components, 40 tests) and smoke-test the read-only actions on org data
-- [ ] Agent Script: system block, subagents (orders, stock, returns), instructions, actions
-- [ ] Validate and preview locally, then publish and activate (after approval)
+- [x] Agent Script: system block, subagents (orders, stock, returns), instructions, actions
+- [x] Validate and preview, live-test in Builder, commit version 2 and activate it (D-47)
 - [ ] Agent tests (`AiEvaluationDefinition` / Testing Center)
 
 ## Move onto the delivery kit (inside phase 2)
@@ -63,7 +63,7 @@ The project adopts the owner's Salesforce delivery kit as its base, since kit 1.
 - [x] M4a: `DstDml`, every write through it (PR #2, deployed). The rest of M4 — Parameters, Switches, Logger, test libraries — is not done: the practice profile does not ask for it (D-44)
 - [x] ~~M5: prefixed metadata in the org~~ — dropped: the practice profile asks for no prefixes; names stay as they are (D-45)
 - [x] Practice profile: the project moves from the kit's delivery profile to its practice profile (kit 1.2.0, D-43)
-- [ ] M6: resume phase 2 — prompt template (done), Agent Script (draft in Builder, live test passed on seven scenarios), agent tests
+- [ ] M6: resume phase 2 — prompt template (done), Agent Script (version 2 committed and active, live test passed on seven scenarios), agent tests
 
 ## Phase 3: Data Cloud
 
