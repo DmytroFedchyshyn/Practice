@@ -23,10 +23,8 @@ never go here: the repository is public.
 
 - The Developer Edition's 17 demo products (GenWatt, Installation, SLA) are inactive (`IsActive = false`), not
   deleted (decision D-36).
-- Return request `RR-00003` (order 00000109, Anchor Bolts M10, Submitted) was created by a Testing Center run in
-  Simulate Mode, as the agent user. The seed script rebuilds the demo data without it.
-- Return request `RR-00004` (same order and product) was created by a conversation-level test in Live Mode against
-  version 2, after the simulated partner confirmed.
+- Testing Center experiments created return requests `RR-00003` (legacy Testing Center, Simulate Mode, version 3) and
+  `RR-00004` (new Testing Center, conversation-level, Live Mode, version 2); both were deleted afterwards (recycle bin).
 - Testing Center suites: five in the legacy Testing Center (`AiEvaluationDefinition`, Setup) and one in the new one
   (Agentforce Studio → Tests), all from the experiments recorded in the pitfalls.
 - Partner Service Agent has a committed version 3 that creates return requests without asking for confirmation. It
