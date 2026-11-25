@@ -6,7 +6,7 @@ Salesforce practice projects and exercises. Each project is self-contained in it
 
 | Project | What it is | Status |
 |---|---|---|
-| [agentforce-distributor](projects/agentforce-distributor) | Agentforce and Data Cloud reference build: a partner portal where partners ask an agent about orders, stock and returns | In progress: agent actions built, agent next |
+| [agentforce-distributor](projects/agentforce-distributor) | Agentforce and Data Cloud reference build: a partner portal where partners ask an agent about orders, stock and returns | In progress: agent active, Data Cloud next |
 
 ## Exercises
 
